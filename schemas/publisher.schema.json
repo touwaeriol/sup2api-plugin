@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/touwaeriol/sup2api-plugin/main/schemas/publisher.schema.json",
+  "title": "Sub2API plugin registry publisher",
+  "description": "publishers/<id>.json; id must equal the file name and the publisher field of the publisher's plugin manifests.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "github", "trust", "status"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+    },
+    "name": { "$ref": "#/$defs/localized" },
+    "homepage": {
+      "type": "string",
+      "pattern": "^https://\\S+$"
+    },
+    "github": {
+      "description": "GitHub logins allowed to submit versions of this publisher's plugins (CI and CODEOWNERS only; not in index.json).",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$"
+      }
+    },
+    "trust": { "enum": ["official", "verified", "community"] },
+    "status": { "enum": ["active", "revoked"] }
+  },
+  "$defs": {
+    "localized": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["zh", "en"],
+      "properties": {
+        "zh": { "type": "string", "minLength": 1 },
+        "en": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

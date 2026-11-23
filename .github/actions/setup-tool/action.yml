@@ -1,0 +1,29 @@
+name: setup sub2api-plugin
+description: >
+  Build the sub2api-plugin CLI from touwaeriol/sup2api and put it on PATH.
+  The tool module resolves the sdk and runtime-contract modules through
+  next/go.work, so it is built from a checkout, not with `go install`.
+inputs:
+  ref:
+    description: Branch, tag or commit of touwaeriol/sup2api to build from.
+    default: develop
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: touwaeriol/sup2api
+        ref: ${{ inputs.ref }}
+        path: tool-src
+        sparse-checkout: next
+        persist-credentials: false
+    - uses: actions/setup-go@v5
+      with:
+        go-version-file: tool-src/next/go.work
+        cache-dependency-path: tool-src/next/tools/sub2api-plugin/go.sum
+    - name: Build sub2api-plugin
+      shell: bash
+      working-directory: tool-src/next/tools/sub2api-plugin
+      run: |
+        go build -trimpath -o "$RUNNER_TEMP/bin/sub2api-plugin" .
+        echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"

@@ -1,0 +1,14 @@
+{
+  "key": "payment",
+  "publisher": "sub2api",
+  "name": {
+    "zh": "充值支付",
+    "en": "Payment & Recharge"
+  },
+  "description": {
+    "zh": "在线充值订单、兑换码与优惠码，余额通过核心账本入账。",
+    "en": "Online recharge orders, redeem codes and promo codes. Balance is credited through the host ledger."
+  },
+  "repo": "touwaeriol/sup2api",
+  "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/payment"
+}

@@ -1,0 +1,82 @@
+# Checks a pull request against the registry rules with `sub2api-plugin
+# registry check`. Runs on the PR's own code with a read-only token and no
+# secrets; comment.yml (workflow_run) posts the result, so fork PRs get a
+# comment too.
+name: check
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  registry-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record PR number
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: mkdir -p out && echo "$PR_NUMBER" > out/pr-number
+
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: head
+          persist-credentials: false
+
+      - name: Checkout PR base
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+          persist-credentials: false
+
+      - name: Build sub2api-plugin
+        id: tool
+        uses: ./head/.github/actions/setup-tool
+
+      - name: Registry check
+        env:
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          sub2api-plugin registry check --registry head --base base --author "$AUTHOR" \
+            --summary out/summary.md --json out/result.json
+
+      - name: Job summary
+        if: always() && steps.tool.outcome == 'success'
+        run: |
+          if [ -f out/summary.md ]; then cat out/summary.md >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ -f out/result.json ]; then jq . out/result.json; fi
+
+      - name: CODEOWNERS is up to date
+        if: always() && steps.tool.outcome == 'success'
+        run: |
+          sub2api-plugin registry codeowners --registry head > out/CODEOWNERS.expected
+          if ! diff -u head/CODEOWNERS out/CODEOWNERS.expected; then
+            echo "::error file=CODEOWNERS::CODEOWNERS is out of date; run: sub2api-plugin registry codeowners --registry . > CODEOWNERS"
+            exit 1
+          fi
+
+      - name: Index builds
+        if: always() && steps.tool.outcome == 'success'
+        run: |
+          sub2api-plugin index --registry head --out out/index.json
+          jq '{version, publishers: (.publishers | length), plugins: (.plugins | length)}' out/index.json
+
+      - name: Upload result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: registry-check
+          path: |
+            out/pr-number
+            out/summary.md
+            out/result.json
+          if-no-files-found: ignore
+          retention-days: 7

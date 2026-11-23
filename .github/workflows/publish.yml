@@ -1,0 +1,56 @@
+# Regenerates index.json from main and pushes it to the `index` branch (an
+# orphan branch holding only index.json), which the cores read from
+# https://raw.githubusercontent.com/touwaeriol/sup2api-plugin/index/index.json
+name: publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-index
+  cancel-in-progress: false
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout registry
+        uses: actions/checkout@v4
+        with:
+          path: registry
+
+      - name: Build sub2api-plugin
+        uses: ./registry/.github/actions/setup-tool
+
+      - name: Generate index.json
+        run: sub2api-plugin index --registry registry --out "$RUNNER_TEMP/index.json"
+
+      - name: Push to the index branch
+        working-directory: registry
+        env:
+          NEW: ${{ runner.temp }}/index.json
+          WT: ${{ runner.temp }}/index-branch
+        run: |
+          if git ls-remote --exit-code --heads origin index > /dev/null; then
+            git fetch --depth=1 origin index
+            git worktree add --detach "$WT" FETCH_HEAD
+          else
+            git worktree add --orphan -b index "$WT"
+          fi
+          cd "$WT"
+          # generated_at changes on every run; compare everything else.
+          if [ -f index.json ] && cmp -s <(jq -S 'del(.generated_at)' index.json) <(jq -S 'del(.generated_at)' "$NEW"); then
+            echo "index.json unchanged; nothing to push"
+            exit 0
+          fi
+          cp "$NEW" index.json
+          git add index.json
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -q -m "index: regenerate from ${GITHUB_SHA::12}"
+          git push origin HEAD:refs/heads/index

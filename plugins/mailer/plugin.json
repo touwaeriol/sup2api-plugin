@@ -1,0 +1,15 @@
+{
+  "key": "mailer",
+  "publisher": "sub2api",
+  "name": {
+    "zh": "邮件",
+    "en": "Mailer"
+  },
+  "description": {
+    "zh": "通过 SMTP 以邮件发送核心和其他插件的通知（通知渠道「邮件」）。",
+    "en": "Delivers the core's and other plugins' notifications by email over SMTP (notification channel \"email\")."
+  },
+  "repo": "touwaeriol/sup2api",
+  "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/mailer",
+  "builtin": true
+}

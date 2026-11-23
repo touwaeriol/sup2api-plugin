@@ -1,0 +1,15 @@
+{
+  "key": "openai",
+  "publisher": "sub2api",
+  "name": {
+    "zh": "OpenAI",
+    "en": "OpenAI"
+  },
+  "description": {
+    "zh": "为内置 openai 平台提供 OpenAI API Key 账号类型（/v1/chat/completions、/v1/responses（含 WebSocket 模式）、/v1/embeddings、/v1/images/generations 和 JSON 形式的 /v1/images/edits）。插件构造上游请求，由核心发送，插件自身不发起任何网络连接。模型价格由管理员在核心中配置。",
+    "en": "OpenAI API key account type for the built-in openai platform (/v1/chat/completions, /v1/responses including its WebSocket mode, /v1/embeddings, /v1/images/generations and the JSON form of /v1/images/edits). The plugin builds the upstream requests; the core sends them, so the plugin itself makes no network connection. Model prices are set by administrators in the core."
+  },
+  "repo": "touwaeriol/sup2api",
+  "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/openai",
+  "builtin": true
+}

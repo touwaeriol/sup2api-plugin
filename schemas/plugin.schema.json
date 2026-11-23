@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/touwaeriol/sup2api-plugin/main/schemas/plugin.schema.json",
+  "title": "Sub2API plugin registry plugin",
+  "description": "plugins/<key>/plugin.json; key must equal the directory name and the key of the plugin manifest.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["key", "publisher", "name", "description", "repo"],
+  "properties": {
+    "key": {
+      "type": "string",
+      "pattern": "^[a-z](_?[a-z0-9]){1,29}$"
+    },
+    "publisher": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+    },
+    "name": { "$ref": "#/$defs/localized" },
+    "description": { "$ref": "#/$defs/localized" },
+    "repo": {
+      "description": "GitHub repository (owner/name) whose Releases host the packages.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$"
+    },
+    "source": {
+      "type": "string",
+      "pattern": "^https://\\S+$"
+    },
+    "builtin": { "type": "boolean" },
+    "deprecated": { "$ref": "#/$defs/deprecated" }
+  },
+  "$defs": {
+    "localized": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["zh", "en"],
+      "properties": {
+        "zh": { "type": "string", "minLength": 1 },
+        "en": { "type": "string", "minLength": 1 }
+      }
+    },
+    "deprecated": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reason"],
+      "properties": {
+        "reason": { "$ref": "#/$defs/localized" }
+      }
+    }
+  }
+}
