@@ -65,7 +65,7 @@ sub2api-plugin index --registry . --out index.json                            # 
 ## 三、发布新版本（检查通过即可合并）
 
 1. 在插件仓库里提高 `manifest.json` 的 `version`，用 `sub2api-plugin pack` 打出 `.s2plugin`。
-2. 在插件仓库（即 `plugin.json` 的 `repo`）发一个 GitHub Release，把 `.s2plugin` 作为附件上传。**一个 Release 只放一个 `.s2plugin`**；发布后不要替换附件，否则 sha256 对不上，已登记的版本将无法安装。
+2. 在插件仓库（即 `plugin.json` 的 `repo`）发一个 GitHub Release，把 `.s2plugin` 作为附件上传，Release 说明写清这一版的改动（商店里“更新说明”链接到这个页面）。tag 用 `v<版本>` 或 `<key>-v<版本>`，必须与包里的版本一致。**一个 Release 只放一个 `.s2plugin`**；发布后不要替换附件，否则 sha256 对不上，已登记的版本将无法安装。
 3. 在本仓库的 fork 里生成版本文件：
 
    ```sh

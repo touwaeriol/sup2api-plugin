@@ -5,7 +5,14 @@
   "description": "plugins/<key>/versions/<version>.json, written by `sub2api-plugin registry add-version`. Once merged only `deprecated` may be added.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "url", "sha256", "size", "host_compat"],
+  "required": [
+    "version",
+    "url",
+    "release_url",
+    "sha256",
+    "size",
+    "host_compat"
+  ],
   "properties": {
     "version": {
       "description": "Semantic version; equals the file name and manifest.version.",
@@ -16,6 +23,11 @@
       "description": "Release asset of the plugin's repo: https://github.com/<repo>/releases/download/<tag>/<file>.s2plugin",
       "type": "string",
       "pattern": "^https://github\\.com/[^/]+/[^/]+/releases/download/\\S+/[^/\\s]+\\.s2plugin$"
+    },
+    "release_url": {
+      "description": "The GitHub Release page of the same repo and tag: https://github.com/<repo>/releases/tag/<tag>; shown in the store as the release notes link.",
+      "type": "string",
+      "pattern": "^https://github\\.com/[^/]+/[^/]+/releases/tag/[^/\\s]+$"
     },
     "sha256": {
       "description": "Lower-case hex SHA-256 of the .s2plugin file.",
@@ -33,24 +45,39 @@
       "type": "string",
       "minLength": 1
     },
-    "deprecated": { "$ref": "#/$defs/deprecated" }
+    "deprecated": {
+      "$ref": "#/$defs/deprecated"
+    }
   },
   "$defs": {
     "localized": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["zh", "en"],
+      "required": [
+        "zh",
+        "en"
+      ],
       "properties": {
-        "zh": { "type": "string", "minLength": 1 },
-        "en": { "type": "string", "minLength": 1 }
+        "zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "deprecated": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["reason"],
+      "required": [
+        "reason"
+      ],
       "properties": {
-        "reason": { "$ref": "#/$defs/localized" }
+        "reason": {
+          "$ref": "#/$defs/localized"
+        }
       }
     }
   }
