@@ -28,7 +28,7 @@ CODEOWNERS                              由 sub2api-plugin registry codeowners �
 
 - **发布者**：`id`、中英文 `name`、可选 `homepage`、`github`（允许为该发布者提交版本的 GitHub 账号，只给 CI 用，不进索引）、`trust`（`official` / `verified` / `community`）、`status`（`active` / `revoked`；撤销后其插件在商店中被标记且不能安装）。
 - **插件**：`key`、`publisher`、中英文 `name` 与 `description`、`repo`（`owner/name`，包只能来自这个仓库的 Release）、可选 `source`、`builtin`、`deprecated`。
-- **版本**：`version`、`url`（必须是 `https://github.com/<repo>/releases/download/<tag>/<文件>.s2plugin`）、`sha256`、`size`、`host_compat`、可选 `deprecated`。版本文件合并后不能再改，只能新增 `deprecated` 字段。
+- **版本**：`version`（语义化版本，不带 `+build` 后缀）、`url`（必须是 `https://github.com/<repo>/releases/download/<tag>/<文件>.s2plugin`）、`release_url`（同一 tag 的 Release 页面 `https://github.com/<repo>/releases/tag/<tag>`，商店里作为“更新说明”链接）、`sha256`、`size`、`host_compat`、可选 `deprecated`。版本文件合并后不能再改，只能新增 `deprecated` 字段。
 
 ## 审核规则
 
@@ -47,6 +47,8 @@ CODEOWNERS                              由 sub2api-plugin registry codeowners �
 
 需要人工审核的 PR 会被打上 `needs-review` 标签，评论里写明原因。检查只是把关，最终合并仍由维护者操作；新增版本的 PR 检查通过后维护者无需逐行审阅即可合并。
 
+权限判断用的 `--author` 是**开启 PR 的账号**。如果 PR 里有别人追加的提交（例如有权推送到该分支的其他人），检查不会区分，维护者合并前请留意提交记录。
+
 ## 开发者入驻与发布
 
 见 [CONTRIBUTING.md](CONTRIBUTING.md)。
@@ -55,11 +57,12 @@ CODEOWNERS                              由 sub2api-plugin registry codeowners �
 
 | 工作流 | 触发 | 作用 |
 |---|---|---|
-| `check.yml` | `pull_request` | 用只读令牌、不读任何 secret，在 PR 代码上运行 `registry check`、核对 `CODEOWNERS`、试生成索引，结果作为 artifact 上传 |
-| `comment.yml` | `check` 完成（`workflow_run`） | 从默认分支运行，不执行 PR 代码；把检查摘要发成 PR 评论（同一条评论持续更新），按需打或去掉 `needs-review` 标签。这样来自 fork 的 PR 也能收到评论 |
+| `check.yml` | `pull_request_target`（目标分支 `main`；opened、synchronize、reopened、edited） | job `registry-check`：运行 `registry check`、核对 `CODEOWNERS`、试生成索引；把摘要发成 PR 评论（同一条评论持续更新），按结果打或去掉 `needs-review` 标签；检查不通过则 job 失败 |
 | `publish.yml` | push 到 `main`、手动触发 | 生成 `index.json` 并推到 `index` 分支；内容（除 `generated_at` 外）没变化就不推 |
 
-工具 `sub2api-plugin` 由 `.github/actions/setup-tool` 从 [touwaeriol/sup2api](https://github.com/touwaeriol/sup2api) 的 `develop` 分支（`next/tools/sub2api-plugin`）现场构建。
+`check.yml` 用 `pull_request_target`，这样来自 fork 的 PR 也能收到评论和标签。它的安全前提是**绝不执行 PR 里的任何代码**：工作流文件、`setup-tool` action 和评论脚本都来自 `main`；PR 只作为数据检出（`head/` 是 PR 与 `main` 合并后的树 `refs/pull/<n>/merge`，`base/` 是 PR 的基线提交），含符号链接的 PR 直接拒绝。修改 `.github/` 下的文件时务必保持这一点。PR 改动 `.github/` 等目录不会影响本次检查本身（检查用的是 `main` 上的版本），工具也会把这类改动标为需人工审核。
+
+工具 `sub2api-plugin` 由 `.github/actions/setup-tool` 从 [touwaeriol/sup2api](https://github.com/touwaeriol/sup2api) 的 `next/tools/sub2api-plugin` 现场构建，版本由该 action 的 `ref` 输入决定（应固定为一个提交 SHA，升级工具时改这里）。所有第三方 action 都固定到提交 SHA。
 
 ## 仓库设置（需维护者在 GitHub 上手动开启）
 
@@ -67,13 +70,13 @@ CODEOWNERS                              由 sub2api-plugin registry codeowners �
 
 1. **`main` 分支保护**（Settings → Rules → Rulesets，新建针对 `main` 的规则集）：
    - 必须通过 Pull Request 合并（Require a pull request before merging）；
-   - 要求状态检查通过（Require status checks to pass），必需检查选 `registry-check`；
+   - 要求状态检查通过（Require status checks to pass），必需检查选 `check.yml` 的 job `registry-check`（先让它在一个 PR 上跑过一次，才能在列表里选到）；
    - 禁止强推、禁止删除分支。
    - 不建议开启“必须由 Code Owners 审核”：插件目录的 code owner 就是发布者本人，而 GitHub 不允许作者批准自己的 PR，开启后新增版本的 PR 无法合并。`CODEOWNERS` 的作用是自动请发布者关注涉及其插件的 PR。
 2. **`index` 分支只允许 Actions 写**（新建针对 `index` 的规则集）：
    - 禁止强推、禁止删除分支；
    - 开启“限制更新”（Restrict updates），并在绕过列表（Bypass list）中加入 GitHub Actions。若账号类型不支持把 GitHub Actions 加入绕过列表，至少保留“禁止强推、禁止删除”，并确保只有维护者对仓库有写权限。
 3. **Actions 设置**（Settings → Actions → General）：
-   - 来自 fork 的 PR 工作流保持“首次贡献者需批准”（或更严格）；
-   - Workflow permissions 选“Read repository contents permission”（各工作流已自行声明所需权限）。
+   - Workflow permissions 选“Read repository contents permission”（各工作流已自行声明所需权限）；
+   - 注意 `pull_request_target` 工作流不受“fork PR 需批准才运行”的设置约束，会自动运行，这正是它只读 PR 数据、不执行 PR 代码的原因。
 4. **标签**：`needs-review` 标签会在第一次使用时自动创建，可在 Issues → Labels 里调整颜色和说明。

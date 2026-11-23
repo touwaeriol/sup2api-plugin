@@ -5,46 +5,77 @@
   "description": "plugins/<key>/plugin.json; key must equal the directory name and the key of the plugin manifest.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["key", "publisher", "name", "description", "repo"],
+  "required": [
+    "key",
+    "publisher",
+    "name",
+    "description",
+    "repo"
+  ],
   "properties": {
     "key": {
       "type": "string",
-      "pattern": "^[a-z](_?[a-z0-9]){1,29}$"
+      "pattern": "^[a-z](_?[a-z0-9]){1,29}$",
+      "maxLength": 30
     },
     "publisher": {
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
     },
-    "name": { "$ref": "#/$defs/localized" },
-    "description": { "$ref": "#/$defs/localized" },
+    "name": {
+      "$ref": "#/$defs/localized"
+    },
+    "description": {
+      "$ref": "#/$defs/localized"
+    },
     "repo": {
-      "description": "GitHub repository (owner/name) whose Releases host the packages.",
+      "description": "GitHub repository (owner/name) whose Releases host the packages; the name may not be . or ..",
       "type": "string",
-      "pattern": "^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$"
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,38}/(?:[A-Za-z0-9_-][A-Za-z0-9._-]{0,99}|\\.[A-Za-z0-9_-][A-Za-z0-9._-]{0,98}|\\.\\.[A-Za-z0-9._-]{1,98})$"
     },
     "source": {
       "type": "string",
       "pattern": "^https://\\S+$"
     },
-    "builtin": { "type": "boolean" },
-    "deprecated": { "$ref": "#/$defs/deprecated" }
+    "builtin": {
+      "type": "boolean"
+    },
+    "deprecated": {
+      "$ref": "#/$defs/deprecated"
+    }
   },
   "$defs": {
     "localized": {
+      "description": "Text per language: zh and en are required, other language keys are allowed.",
       "type": "object",
-      "additionalProperties": false,
-      "required": ["zh", "en"],
+      "required": [
+        "zh",
+        "en"
+      ],
       "properties": {
-        "zh": { "type": "string", "minLength": 1 },
-        "en": { "type": "string", "minLength": 1 }
+        "zh": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "en": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
       }
     },
     "deprecated": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["reason"],
+      "required": [
+        "reason"
+      ],
       "properties": {
-        "reason": { "$ref": "#/$defs/localized" }
+        "reason": {
+          "$ref": "#/$defs/localized"
+        }
       }
     }
   }

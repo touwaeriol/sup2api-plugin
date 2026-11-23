@@ -1,16 +1,12 @@
-// Posts the registry check result (artifact of check.yml) on its pull request
-// and sets or clears the needs-review label. Called by comment.yml.
-//
-// The artifact comes from a run of the PR's own code, so it is untrusted:
-// the PR number is checked against the run's head commit through the API,
-// and a PR that touches anything outside publishers/ and plugins/ (for
-// instance check.yml itself) always needs a manual review.
+// Posts the result of `sub2api-plugin registry check` (out/result.json and
+// out/summary.md) on the pull request, keeping one comment up to date, and
+// sets or clears the needs-review label. Called by check.yml from the base
+// branch; result and summary are data produced from the PR's files.
 const fs = require('fs');
 const path = require('path');
 
 const MARKER = '<!-- sub2api-registry-check -->';
 const LABEL = 'needs-review';
-const REGISTRY_PATH = /^(publishers|plugins)\//;
 const MAX_SUMMARY = 60000;
 
 function read(dir, name) {
@@ -21,29 +17,28 @@ function read(dir, name) {
   }
 }
 
-function parseResult(text) {
+function parse(text) {
   try {
-    return JSON.parse(text);
+    const v = JSON.parse(text);
+    return v && typeof v === 'object' ? v : null;
   } catch {
     return null;
   }
 }
 
-async function outsideFiles(github, repo, number) {
-  const files = await github.paginate(github.rest.pulls.listFiles, { ...repo, pull_number: number, per_page: 100 });
-  const names = files.flatMap((f) => [f.filename, f.previous_filename].filter(Boolean));
-  return names.filter((n) => !REGISTRY_PATH.test(n));
-}
-
-function render({ run, result, summary, reasons }) {
-  const passed = run.conclusion === 'success';
+function render({ result, summary, sha, runUrl }) {
+  const extra = [
+    ['CODEOWNERS 与生成结果一致', process.env.CODEOWNERS_OUTCOME],
+    ['索引可以生成', process.env.INDEX_OUTCOME],
+  ].filter(([, outcome]) => outcome && outcome !== 'success');
+  const passed = result?.ok === true && extra.length === 0;
   const lines = [
     MARKER,
     `### 索引检查：${passed ? '通过' : '未通过'}`,
     '',
-    `- 提交：\`${run.head_sha.slice(0, 12)}\`，[运行记录](${run.html_url})`,
-    `- 需人工审核：${reasons.length ? '是' : '否'}`,
-    ...reasons.map((r) => `  - ${r}`),
+    `- PR 提交：\`${sha.slice(0, 12)}\`（检查的是它与 main 合并后的树），[运行记录](${runUrl})`,
+    `- 需人工审核：${result?.needs_manual_review === false ? '否' : '是'}`,
+    ...extra.map(([what, outcome]) => `- ${what}：未通过（${outcome}）`),
     '',
   ];
   if (!result) lines.push('> 没有拿到检查结果（result.json），请看运行记录。', '');
@@ -77,28 +72,13 @@ async function setLabel(github, repo, number, on) {
   }
 }
 
-module.exports = async ({ github, context, core, dir }) => {
-  const run = context.payload.workflow_run;
+module.exports = async ({ github, context, dir }) => {
+  const pr = context.payload.pull_request;
   const repo = context.repo;
-  const number = Number((read(dir, 'pr-number') || '').trim());
-  if (!Number.isSafeInteger(number) || number <= 0) {
-    core.setFailed('the check artifact has no PR number; see the check run');
-    return;
-  }
-  const { data: pr } = await github.rest.pulls.get({ ...repo, pull_number: number });
-  if (pr.head.sha !== run.head_sha) {
-    core.info(`PR #${number} moved on from ${run.head_sha}; its newer run reports`);
-    return;
-  }
-
-  const result = parseResult(read(dir, 'result.json'));
-  const reasons = [];
-  if (result?.needs_manual_review === true) reasons.push('检查工具标记：新发布者、新插件、改动发布者或删除版本');
-  if (!result) reasons.push('没有检查结果');
-  const outside = await outsideFiles(github, repo, number);
-  if (outside.length) reasons.push(`改动了 publishers/、plugins/ 以外的文件：${outside.slice(0, 10).map((n) => `\`${n}\``).join('、')}`);
-
-  const body = render({ run, result, summary: read(dir, 'summary.md'), reasons });
-  await upsertComment(github, repo, number, body);
-  await setLabel(github, repo, number, reasons.length > 0);
+  const runUrl = `${context.serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${context.runId}`;
+  const result = parse(read(dir, 'result.json'));
+  const body = render({ result, summary: read(dir, 'summary.md'), sha: pr.head.sha, runUrl });
+  await upsertComment(github, repo, pr.number, body);
+  // Without a result the PR cannot be trusted to need no review.
+  await setLabel(github, repo, pr.number, result?.needs_manual_review !== false);
 };

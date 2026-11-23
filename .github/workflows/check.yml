@@ -1,14 +1,21 @@
-# Checks a pull request against the registry rules with `sub2api-plugin
-# registry check`. Runs on the PR's own code with a read-only token and no
-# secrets; comment.yml (workflow_run) posts the result, so fork PRs get a
-# comment too.
+# Reviews a pull request with `sub2api-plugin registry check`, comments the
+# result on the PR and sets the needs-review label.
+#
+# pull_request_target: this file, the setup-tool action and the report
+# script come from the base branch, and the token can comment on fork PRs.
+# The PR is checked out as data only (head/ = its merge ref, base/ = its
+# base commit); nothing from head/ is ever executed.
 name: check
 
 on:
-  pull_request:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+    branches: [main]
 
 permissions:
   contents: read
+  pull-requests: write
+  issues: write # addLabels creates needs-review on first use
 
 concurrency:
   group: check-${{ github.event.pull_request.number }}
@@ -18,44 +25,55 @@ jobs:
   registry-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Record PR number
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: mkdir -p out && echo "$PR_NUMBER" > out/pr-number
-
-      - name: Checkout PR head
-        uses: actions/checkout@v4
+      - name: Checkout workflow sources (base branch)
+        id: trusted
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          path: trusted
+          sparse-checkout: .github
+          persist-credentials: false
+
+      - name: Checkout PR merge tree (data only)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
           path: head
           persist-credentials: false
 
-      - name: Checkout PR base
-        uses: actions/checkout@v4
+      - name: Checkout PR base (data only)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: ${{ github.event.pull_request.base.sha }}
           path: base
           persist-credentials: false
 
+      - name: Refuse symlinks in the PR
+        run: |
+          links=$(find head -path head/.git -prune -o -type l -print)
+          if [ -n "$links" ]; then
+            echo "::error::symlinks are not allowed in the registry:"; echo "$links"
+            exit 1
+          fi
+
       - name: Build sub2api-plugin
         id: tool
-        uses: ./head/.github/actions/setup-tool
+        uses: ./trusted/.github/actions/setup-tool
 
       - name: Registry check
+        id: check
         env:
           AUTHOR: ${{ github.event.pull_request.user.login }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
+          mkdir -p out
+          # The verdict comes from result.json (ok); a failing exit is reported below.
           sub2api-plugin registry check --registry head --base base --author "$AUTHOR" \
-            --summary out/summary.md --json out/result.json
-
-      - name: Job summary
-        if: always() && steps.tool.outcome == 'success'
-        run: |
-          if [ -f out/summary.md ]; then cat out/summary.md >> "$GITHUB_STEP_SUMMARY"; fi
-          if [ -f out/result.json ]; then jq . out/result.json; fi
+            --summary out/summary.md --json > out/result.json || echo "registry check exited with $?"
+          cat out/summary.md >> "$GITHUB_STEP_SUMMARY" || true
 
       - name: CODEOWNERS is up to date
-        if: always() && steps.tool.outcome == 'success'
+        id: codeowners
+        if: always() && steps.check.outcome == 'success'
         run: |
           sub2api-plugin registry codeowners --registry head > out/CODEOWNERS.expected
           if ! diff -u head/CODEOWNERS out/CODEOWNERS.expected; then
@@ -64,19 +82,20 @@ jobs:
           fi
 
       - name: Index builds
-        if: always() && steps.tool.outcome == 'success'
-        run: |
-          sub2api-plugin index --registry head --out out/index.json
-          jq '{version, publishers: (.publishers | length), plugins: (.plugins | length)}' out/index.json
+        id: index
+        if: always() && steps.check.outcome == 'success'
+        run: sub2api-plugin index --registry head --out out/index.json
 
-      - name: Upload result
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Comment and label
+        if: always() && steps.trusted.outcome == 'success'
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        env:
+          CODEOWNERS_OUTCOME: ${{ steps.codeowners.outcome }}
+          INDEX_OUTCOME: ${{ steps.index.outcome }}
         with:
-          name: registry-check
-          path: |
-            out/pr-number
-            out/summary.md
-            out/result.json
-          if-no-files-found: ignore
-          retention-days: 7
+          script: |
+            const report = require('./trusted/.github/scripts/report.js');
+            await report({ github, context, dir: 'out' });
+
+      - name: Verdict
+        run: jq -e '.ok == true' out/result.json > /dev/null || { echo "::error::registry check failed; see the PR comment"; exit 1; }

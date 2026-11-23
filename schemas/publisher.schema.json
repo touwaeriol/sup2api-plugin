@@ -5,13 +5,21 @@
   "description": "publishers/<id>.json; id must equal the file name and the publisher field of the publisher's plugin manifests.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "name", "github", "trust", "status"],
+  "required": [
+    "id",
+    "name",
+    "github",
+    "trust",
+    "status"
+  ],
   "properties": {
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
     },
-    "name": { "$ref": "#/$defs/localized" },
+    "name": {
+      "$ref": "#/$defs/localized"
+    },
     "homepage": {
       "type": "string",
       "pattern": "^https://\\S+$"
@@ -22,21 +30,46 @@
       "minItems": 1,
       "uniqueItems": true,
       "items": {
+        "description": "GitHub login: letters, digits and single hyphens, not starting or ending with a hyphen, at most 39 characters.",
         "type": "string",
-        "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$"
+        "maxLength": 39,
+        "pattern": "^[A-Za-z0-9](?:-?[A-Za-z0-9]){0,38}$"
       }
     },
-    "trust": { "enum": ["official", "verified", "community"] },
-    "status": { "enum": ["active", "revoked"] }
+    "trust": {
+      "enum": [
+        "official",
+        "verified",
+        "community"
+      ]
+    },
+    "status": {
+      "enum": [
+        "active",
+        "revoked"
+      ]
+    }
   },
   "$defs": {
     "localized": {
+      "description": "Text per language: zh and en are required, other language keys are allowed.",
       "type": "object",
-      "additionalProperties": false,
-      "required": ["zh", "en"],
+      "required": [
+        "zh",
+        "en"
+      ],
       "properties": {
-        "zh": { "type": "string", "minLength": 1 },
-        "en": { "type": "string", "minLength": 1 }
+        "zh": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "en": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
       }
     }
   }

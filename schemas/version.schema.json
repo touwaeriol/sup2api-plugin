@@ -15,14 +15,14 @@
   ],
   "properties": {
     "version": {
-      "description": "Semantic version; equals the file name and manifest.version.",
+      "description": "Semantic version without build metadata; equals the file name and manifest.version.",
       "type": "string",
-      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$"
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?$"
     },
     "url": {
       "description": "Release asset of the plugin's repo: https://github.com/<repo>/releases/download/<tag>/<file>.s2plugin",
       "type": "string",
-      "pattern": "^https://github\\.com/[^/]+/[^/]+/releases/download/\\S+/[^/\\s]+\\.s2plugin$"
+      "pattern": "^https://github\\.com/[^/]+/[^/]+/releases/download/[^/\\s?#]+/[^/\\s?#]+\\.s2plugin$"
     },
     "release_url": {
       "description": "The GitHub Release page of the same repo and tag: https://github.com/<repo>/releases/tag/<tag>; shown in the store as the release notes link.",
@@ -51,8 +51,8 @@
   },
   "$defs": {
     "localized": {
+      "description": "Text per language: zh and en are required, other language keys are allowed.",
       "type": "object",
-      "additionalProperties": false,
       "required": [
         "zh",
         "en"
@@ -60,12 +60,15 @@
       "properties": {
         "zh": {
           "type": "string",
-          "minLength": 1
+          "pattern": "\\S"
         },
         "en": {
           "type": "string",
-          "minLength": 1
+          "pattern": "\\S"
         }
+      },
+      "additionalProperties": {
+        "type": "string"
       }
     },
     "deprecated": {

@@ -65,13 +65,15 @@ sub2api-plugin index --registry . --out index.json                            # 
 ## 三、发布新版本（检查通过即可合并）
 
 1. 在插件仓库里提高 `manifest.json` 的 `version`，用 `sub2api-plugin pack` 打出 `.s2plugin`。
-2. 在插件仓库（即 `plugin.json` 的 `repo`）发一个 GitHub Release，把 `.s2plugin` 作为附件上传，Release 说明写清这一版的改动（商店里“更新说明”链接到这个页面）。tag 用 `v<版本>` 或 `<key>-v<版本>`，必须与包里的版本一致。**一个 Release 只放一个 `.s2plugin`**；发布后不要替换附件，否则 sha256 对不上，已登记的版本将无法安装。
+2. 在插件仓库（即 `plugin.json` 的 `repo`）发一个 GitHub Release，把 `.s2plugin` 作为附件上传，Release 说明写清这一版的改动（商店里“更新说明”链接到这个页面）。tag 只能是 `v<版本>`、`<key>-v<版本>` 或 `plugin-<key>-v<版本>` 三种之一，版本必须与包里的 `manifest.json` 一致（例如 `v1.2.0`、`acme_hello-v1.2.0`、`plugin-acme_hello-v1.2.0`）。一个仓库放多个插件时请用带 key 的形式。**一个 Release 只放一个 `.s2plugin`**；发布后不要替换附件，否则 sha256 对不上，已登记的版本将无法安装。
 3. 在本仓库的 fork 里生成版本文件：
 
    ```sh
    sub2api-plugin registry add-version --registry . --plugin <key>             # 读该仓库的最新 Release
    sub2api-plugin registry add-version --registry . --plugin <key> --tag v1.2.0  # 或指定 tag
    ```
+
+   **一个仓库发布多个插件时必须带 `--tag`**（例如第一方插件都在 `touwaeriol/sup2api`）：不带时工具取的是整个仓库的最新 Release，很可能是别的插件或核心的 Release。
 
    工具会下载附件、计算 sha256 和大小、读取包内清单，写出 `plugins/<key>/versions/<version>.json`。请勿手改这个文件。设置了 `GITHUB_TOKEN` 环境变量时工具会带上它，避免 GitHub API 限流。
 4. 提 PR（只包含这一个版本文件）。提交 PR 的账号必须在发布者的 `github` 列表里。`check` 会重新下载包并核对，并在 PR 评论里列出与上一版相比新增的宿主权限（标出高风险项）、用户权限、数据库迁移和出口域名。检查通过即可合并；合并后索引随即更新（raw 地址有几分钟缓存），核心刷新市场后即可看到。
@@ -97,4 +99,5 @@ sub2api-plugin index --registry . --out index.json                            # 
 - 一个 PR 只改一个发布者名下的文件（`publishers/<id>.json` 和它的插件目录）。
 - 已合并的版本文件只能新增 `deprecated`，不能改其他字段；要修正就发一个新版本。
 - 改了 `publishers/*.json` 就同步更新 `CODEOWNERS`，否则检查失败。
+- 权限按开启 PR 的账号判断；不要让他人往你的 PR 分支追加提交。
 - 改动 `publishers/`、`plugins/` 以外的文件一律人工审核。
