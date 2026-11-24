@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-11-24T08:50:19Z",
+  "generated_at": "2026-11-24T13:27:04Z",
   "publishers": [
     {
       "id": "sub2api",
@@ -31,7 +31,17 @@
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/anthropic",
       "builtin": true,
-      "versions": []
+      "versions": [
+        {
+          "version": "0.4.0",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-anthropic-v0.4.0/anthropic-0.4.0.s2plugin",
+          "sha256": "eb0719bb0ed6955266c444abb84cf511f9ecb6d73d721fa3f0d96b660c025108",
+          "size": 15117676,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-anthropic-v0.4.0",
+          "source_digest": "sha256:8dfa359ab7aa1019be64906bc315c01e70bd8cbc9a6fea7a0f3bcdaf88b9420f"
+        }
+      ]
     },
     {
       "key": "azure_openai",
@@ -46,7 +56,17 @@
       },
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/azure-openai",
-      "versions": []
+      "versions": [
+        {
+          "version": "0.1.0",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-azure_openai-v0.1.0/azure_openai-0.1.0.s2plugin",
+          "sha256": "969d4541981258d7650620e6fe1ff67cdadeffd7de9414aee58fea6414273e6e",
+          "size": 15150174,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-azure_openai-v0.1.0",
+          "source_digest": "sha256:bac50cef902341560878afe3ed8c24ca42726c50e9571940c5a128fc759d5745"
+        }
+      ]
     },
     {
       "key": "bedrock",
@@ -61,7 +81,17 @@
       },
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/bedrock",
-      "versions": []
+      "versions": [
+        {
+          "version": "0.1.0",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-bedrock-v0.1.0/bedrock-0.1.0.s2plugin",
+          "sha256": "3f58c1027b1c873c7a575114262f7b56325f773afc7a123f08898832639163ae",
+          "size": 15212705,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-bedrock-v0.1.0",
+          "source_digest": "sha256:a1ebcf2a58e5929dc650d7f85669ba199e93dab3df776aacb9cab9b792d4e628"
+        }
+      ]
     },
     {
       "key": "codex",
@@ -77,7 +107,17 @@
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/codex",
       "builtin": true,
-      "versions": []
+      "versions": [
+        {
+          "version": "0.2.2",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-codex-v0.2.2/codex-0.2.2.s2plugin",
+          "sha256": "10d5fac5cf801ee0beddd932dd9dd83772ed452436e8876ab184852f32280876",
+          "size": 15264700,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-codex-v0.2.2",
+          "source_digest": "sha256:f1810fb294780e9e11bdbb4de23f664b54765572551f7b8171a705fb6e84bf80"
+        }
+      ]
     },
     {
       "key": "dynweight",
@@ -93,7 +133,17 @@
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/dynweight",
       "builtin": true,
-      "versions": []
+      "versions": [
+        {
+          "version": "0.7.0",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-dynweight-v0.7.0/dynweight-0.7.0.s2plugin",
+          "sha256": "705a95d97cf3b4568cb837201c4e5ac245c609dcda440e8feb4ee5da7251c230",
+          "size": 15588240,
+          "host_compat": ">=0.1.311 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-dynweight-v0.7.0",
+          "source_digest": "sha256:774778bd66673e5de9e54faf2f8a32556bf2e1a84c8f57b609b29c45a1b809cc"
+        }
+      ]
     },
     {
       "key": "gemini",
@@ -109,7 +159,17 @@
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/gemini",
       "builtin": true,
-      "versions": []
+      "versions": [
+        {
+          "version": "0.4.1",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-gemini-v0.4.1/gemini-0.4.1.s2plugin",
+          "sha256": "64d3da7bdb3c74e27864fcc18668da0da1d3990ea3287709f1e81227cb6bb987",
+          "size": 15339854,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-gemini-v0.4.1",
+          "source_digest": "sha256:633becb00ee6d162c7a6f9912badb449f00eb91c9fbc497d463b65b8f1c27634"
+        }
+      ]
     },
     {
       "key": "guard",
@@ -124,7 +184,17 @@
       },
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/guard",
-      "versions": []
+      "versions": [
+        {
+          "version": "0.3.1",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-guard-v0.3.1/guard-0.3.1.s2plugin",
+          "sha256": "6db632ffecae2d1c86d2f0dc9f8d206567273fd855d542bd48ee7f5bfc994760",
+          "size": 15351010,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-guard-v0.3.1",
+          "source_digest": "sha256:ade3b4291671102fe8c2a117dfc11e646eb5beea4a4da0dc07ba99b2a60a0858"
+        }
+      ]
     },
     {
       "key": "mailer",
@@ -140,7 +210,17 @@
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/mailer",
       "builtin": true,
-      "versions": []
+      "versions": [
+        {
+          "version": "0.1.5",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-mailer-v0.1.5/mailer-0.1.5.s2plugin",
+          "sha256": "afdf8318a020e774aeef2b3ffc9d97f59e20eddc43354737d0924b5f1a33fbe2",
+          "size": 15124734,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-mailer-v0.1.5",
+          "source_digest": "sha256:dc7303b2e69124a201d6206e74706d9801b594b09c2fdbadb496b29607297e88"
+        }
+      ]
     },
     {
       "key": "moderation",
@@ -156,7 +236,17 @@
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/moderation",
       "builtin": true,
-      "versions": []
+      "versions": [
+        {
+          "version": "0.13.0",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-moderation-v0.13.0/moderation-0.13.0.s2plugin",
+          "sha256": "c78f9f440678df6181fad04fae259a801d7ab107b450676ca922ac395abe8515",
+          "size": 17108520,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-moderation-v0.13.0",
+          "source_digest": "sha256:593b2f9ab0eefa0e5a2695983e16e63c9ecee6060ac813b7c972982cabae8c51"
+        }
+      ]
     },
     {
       "key": "newapi",
@@ -172,7 +262,17 @@
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/newapi",
       "builtin": true,
-      "versions": []
+      "versions": [
+        {
+          "version": "0.1.2",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-newapi-v0.1.2/newapi-0.1.2.s2plugin",
+          "sha256": "0124f3a371edee13009cbb9835d3a6058ee35fa748f21e9fe498cd020d615165",
+          "size": 15375914,
+          "host_compat": ">=0.1.312 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-newapi-v0.1.2",
+          "source_digest": "sha256:cb18a39f6f3b63bd99143d82cf93b4ed436f5348039a8225a3d69f44efea7063"
+        }
+      ]
     },
     {
       "key": "openai",
@@ -188,7 +288,17 @@
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/openai",
       "builtin": true,
-      "versions": []
+      "versions": [
+        {
+          "version": "0.5.0",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-openai-v0.5.0/openai-0.5.0.s2plugin",
+          "sha256": "7392f07b61456297157e9f87df93f8c9e7d9029ae979f90cdc4b3c7086135a61",
+          "size": 15138880,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-openai-v0.5.0",
+          "source_digest": "sha256:9e5cdf9ad7395169467495e318b4f269d3b6b2584bccc7a0d37713e073ae4e7b"
+        }
+      ]
     },
     {
       "key": "payment",
@@ -203,7 +313,17 @@
       },
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/payment",
-      "versions": []
+      "versions": [
+        {
+          "version": "0.2.0",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-payment-v0.2.0/payment-0.2.0.s2plugin",
+          "sha256": "73bdc16dfdea31a93990b53e8347171bfe359d1e590c4a1b479a2083f58a578a",
+          "size": 15291190,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-payment-v0.2.0",
+          "source_digest": "sha256:6264f9127876c11a59ba28a4cf087489ca3f3778049a1efbc1ada5edf15b08cb"
+        }
+      ]
     },
     {
       "key": "relay",
@@ -218,7 +338,17 @@
       },
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/relay",
-      "versions": []
+      "versions": [
+        {
+          "version": "0.4.0",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-relay-v0.4.0/relay-0.4.0.s2plugin",
+          "sha256": "84a9f266581f4482352b2dd5cbf8b089f05b513af3ce4d649ff0f32820dbd333",
+          "size": 15138904,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-relay-v0.4.0",
+          "source_digest": "sha256:059333811a9eadc931976e3655a65e4e2258acfb01ab9bfb3bd45f90a310d734"
+        }
+      ]
     },
     {
       "key": "sub2api",
@@ -234,7 +364,17 @@
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/sub2api",
       "builtin": true,
-      "versions": []
+      "versions": [
+        {
+          "version": "0.1.2",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-sub2api-v0.1.2/sub2api-0.1.2.s2plugin",
+          "sha256": "576cd4e156a723ddcdbb34dd8b023fe8391b8c88efe8610cde9abdf50b691108",
+          "size": 15389339,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-sub2api-v0.1.2",
+          "source_digest": "sha256:6277161ced5f8f65bb5bfcca7ee4e77eba059a5015caadc02fd6ba32a7375da5"
+        }
+      ]
     },
     {
       "key": "typesafe",
@@ -250,7 +390,17 @@
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/typesafe",
       "builtin": true,
-      "versions": []
+      "versions": [
+        {
+          "version": "0.1.1",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-typesafe-v0.1.1/typesafe-0.1.1.s2plugin",
+          "sha256": "0ea96bfcdec23f4bbb9891c99147419a0f22979cd64a6131a4e79d30387e2d86",
+          "size": 15150996,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-typesafe-v0.1.1",
+          "source_digest": "sha256:143aea9a4595d6c2ec13894fb0d5acb2d6b1a4b0888ddc303e9d00d2b4d48fa1"
+        }
+      ]
     },
     {
       "key": "vertex",
@@ -265,7 +415,17 @@
       },
       "repo": "touwaeriol/sup2api",
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/vertex",
-      "versions": []
+      "versions": [
+        {
+          "version": "0.1.1",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-vertex-v0.1.1/vertex-0.1.1.s2plugin",
+          "sha256": "be2d53b8a082a3cd0f9a863750cee08832b315b2094eb48861cc85bf2bcb3e43",
+          "size": 15330868,
+          "host_compat": ">=0.1.312 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-vertex-v0.1.1",
+          "source_digest": "sha256:f5b37efc626ad3341c17757ff9bcae24c7c945b55ccc95dd0cb4aea9330f1210"
+        }
+      ]
     }
   ]
 }
