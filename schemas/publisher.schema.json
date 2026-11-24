@@ -14,8 +14,9 @@
   ],
   "properties": {
     "id": {
+      "description": "Lower-case letters and digits with single inner underscores, at most 27 bytes: no hyphen, no double or trailing underscore.",
       "type": "string",
-      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+      "pattern": "^[a-z0-9](_?[a-z0-9]){0,26}$"
     },
     "name": {
       "$ref": "#/$defs/localized"

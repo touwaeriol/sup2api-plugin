@@ -1,16 +1,22 @@
 # Reviews a pull request with `sub2api-plugin registry check`, comments the
 # result on the PR and sets the needs-review label.
 #
+# Channels are branches (publish.yml). Registrations target develop (the
+# test channel); develop is promoted to main (the production channel) by a
+# pull request from this repository's develop branch, which is checked with
+# --promotion: its changes were each checked on develop. A new channel's
+# branch is added to the list below as well.
+#
 # pull_request_target: this file, the setup-tool action and the report
-# script come from the base branch, and the token can comment on fork PRs.
-# The PR is checked out as data only (head/ = its merge ref, base/ = its
-# base commit); nothing from head/ is ever executed.
+# script come from the base branch (develop or main), and the token can
+# comment on fork PRs. The PR is checked out as data only (head/ = its merge
+# ref, base/ = its base commit); nothing from head/ is ever executed.
 name: check
 
 on:
   pull_request_target:
     types: [opened, synchronize, reopened, edited]
-    branches: [main]
+    branches: [develop, main]
 
 permissions:
   contents: read
@@ -64,10 +70,14 @@ jobs:
         env:
           AUTHOR: ${{ github.event.pull_request.user.login }}
           GITHUB_TOKEN: ${{ github.token }}
+          # Only maintainers can push this repository's develop branch.
+          PROMOTION: ${{ github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository }}
         run: |
           mkdir -p out
+          promotion=
+          if [ "$PROMOTION" = true ]; then promotion=--promotion; fi
           # The verdict comes from result.json (ok); a failing exit is reported below.
-          sub2api-plugin registry check --registry head --base base --author "$AUTHOR" \
+          sub2api-plugin registry check --registry head --base base --author "$AUTHOR" $promotion \
             --summary out/summary.md --json > out/result.json || echo "registry check exited with $?"
           cat out/summary.md >> "$GITHUB_STEP_SUMMARY" || true
 

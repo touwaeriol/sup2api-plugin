@@ -1,5 +1,6 @@
 <!--
-一个 PR 只改一个发布者名下的文件（publishers/<id>.json 或它的插件目录）。
+PR 提到 develop（测试频道）；develop 晋级到 main 由维护者操作。
+一个 PR 只改一个发布者名下的文件（publishers/<id>.json 或它的插件目录 plugins/<id>/）。
 版本文件请用 `sub2api-plugin registry add-version` 生成，不要手写。
 说明见 CONTRIBUTING.md。
 -->
@@ -17,7 +18,7 @@
 ## 发布者与插件
 
 - 发布者 id：
-- 插件 key：
+- 插件（publisher/key）：
 - 版本：
 - Release 地址：
 

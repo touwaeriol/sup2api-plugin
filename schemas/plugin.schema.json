@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/touwaeriol/sup2api-plugin/main/schemas/plugin.schema.json",
   "title": "Sub2API plugin registry plugin",
-  "description": "plugins/<key>/plugin.json; key must equal the directory name and the key of the plugin manifest.",
+  "description": "plugins/<publisher>/<key>/plugin.json; publisher and key must equal the two directory names and the publisher and key of the plugin manifest. The plugin id they make (the bare key for publisher sub2api, _<publisher>__<key> for any other) is at most 30 bytes.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -14,13 +14,15 @@
   ],
   "properties": {
     "key": {
+      "description": "The manifest's key: no double underscore, no trailing underscore, not core or system.",
       "type": "string",
       "pattern": "^[a-z](_?[a-z0-9]){1,29}$",
       "maxLength": 30
     },
     "publisher": {
+      "description": "Publisher id: publishers/<publisher>.json must exist.",
       "type": "string",
-      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+      "pattern": "^[a-z0-9](_?[a-z0-9]){0,26}$"
     },
     "name": {
       "$ref": "#/$defs/localized"

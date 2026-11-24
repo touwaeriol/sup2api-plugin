@@ -26,7 +26,7 @@ function parse(text) {
   }
 }
 
-function render({ result, summary, sha, runUrl }) {
+function render({ result, summary, sha, base, runUrl }) {
   const extra = [
     ['CODEOWNERS 与生成结果一致', process.env.CODEOWNERS_OUTCOME],
     ['索引可以生成', process.env.INDEX_OUTCOME],
@@ -36,7 +36,7 @@ function render({ result, summary, sha, runUrl }) {
     MARKER,
     `### 索引检查：${passed ? '通过' : '未通过'}`,
     '',
-    `- PR 提交：\`${sha.slice(0, 12)}\`（检查的是它与 main 合并后的树），[运行记录](${runUrl})`,
+    `- PR 提交：\`${sha.slice(0, 12)}\`（检查的是它与 ${base} 合并后的树），[运行记录](${runUrl})`,
     `- 需人工审核：${result?.needs_manual_review === false ? '否' : '是'}`,
     ...extra.map(([what, outcome]) => `- ${what}：未通过（${outcome}）`),
     '',
@@ -77,7 +77,7 @@ module.exports = async ({ github, context, dir }) => {
   const repo = context.repo;
   const runUrl = `${context.serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${context.runId}`;
   const result = parse(read(dir, 'result.json'));
-  const body = render({ result, summary: read(dir, 'summary.md'), sha: pr.head.sha, runUrl });
+  const body = render({ result, summary: read(dir, 'summary.md'), sha: pr.head.sha, base: pr.base.ref, runUrl });
   await upsertComment(github, repo, pr.number, body);
   // Without a result the PR cannot be trusted to need no review.
   await setLabel(github, repo, pr.number, result?.needs_manual_review !== false);

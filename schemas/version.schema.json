@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/touwaeriol/sup2api-plugin/main/schemas/version.schema.json",
   "title": "Sub2API plugin registry version",
-  "description": "plugins/<key>/versions/<version>.json, written by `sub2api-plugin registry add-version`. Once merged only `deprecated` may be added.",
+  "description": "plugins/<publisher>/<key>/versions/<version>.json, written by `sub2api-plugin registry add-version`. Once merged only `deprecated` may be added.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -44,6 +44,11 @@
       "description": "manifest.hostCompat, a semver constraint on the core version.",
       "type": "string",
       "minLength": 1
+    },
+    "source_digest": {
+      "description": "The digest of the plugin sources the package was built from, read from its source.json (written by sub2api-plugin pack); absent for packages without one.",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
     },
     "deprecated": {
       "$ref": "#/$defs/deprecated"
