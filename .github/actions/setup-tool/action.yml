@@ -8,7 +8,7 @@ inputs:
     description: Commit (or branch/tag) of touwaeriol/sup2api to build the tool from.
     # Pinned: a branch would let any push to sup2api change what every
     # registry check runs. Bump deliberately when the tool changes.
-    default: ea9ea26e6f8c81b4f97d4c6f94db4f07ea65dbf9 # touwaeriol/sup2api develop, 2026-11-24
+    default: 795de1da5e15fd0c38c7522e6c3d0e915cc60c1d # touwaeriol/sup2api develop, 2026-11-24
 runs:
   using: composite
   steps:
