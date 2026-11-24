@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/touwaeriol/sup2api-plugin/main/schemas/plugin.schema.json",
+  "title": "Sub2API plugin registry plugin",
+  "description": "plugins/<publisher>/<key>/plugin.json; publisher and key must equal the two directory names and the publisher and key of the plugin manifest. The plugin id they make (the bare key for publisher sub2api, _<publisher>__<key> for any other) is at most 30 bytes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "publisher",
+    "name",
+    "description",
+    "repo"
+  ],
+  "properties": {
+    "key": {
+      "description": "The manifest's key: no double underscore, no trailing underscore, not core or system.",
+      "type": "string",
+      "pattern": "^[a-z](_?[a-z0-9]){1,29}$",
+      "maxLength": 30
+    },
+    "publisher": {
+      "description": "Publisher id: publishers/<publisher>.json must exist.",
+      "type": "string",
+      "maxLength": 25,
+      "pattern": "^[a-z0-9](_?[a-z0-9])*$"
+    },
+    "name": {
+      "$ref": "#/$defs/localized"
+    },
+    "description": {
+      "$ref": "#/$defs/localized"
+    },
+    "repo": {
+      "description": "GitHub repository (owner/name) whose Releases host the packages; the name may not be . or ..",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,38}/(?:[A-Za-z0-9_-][A-Za-z0-9._-]{0,99}|\\.[A-Za-z0-9_-][A-Za-z0-9._-]{0,98}|\\.\\.[A-Za-z0-9._-]{1,98})$"
+    },
+    "source": {
+      "type": "string",
+      "pattern": "^https://\\S+$"
+    },
+    "builtin": {
+      "type": "boolean"
+    },
+    "deprecated": {
+      "$ref": "#/$defs/deprecated"
+    }
+  },
+  "$defs": {
+    "localized": {
+      "description": "Text per language: zh and en are required, other language keys are allowed.",
+      "type": "object",
+      "required": [
+        "zh",
+        "en"
+      ],
+      "properties": {
+        "zh": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "en": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "deprecated": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reason"
+      ],
+      "properties": {
+        "reason": {
+          "$ref": "#/$defs/localized"
+        }
+      }
+    }
+  }
+}

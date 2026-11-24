@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/touwaeriol/sup2api-plugin/main/schemas/version.schema.json",
+  "title": "Sub2API plugin registry version",
+  "description": "plugins/<publisher>/<key>/versions/<version>.json, written by `sub2api-plugin registry add-version`. Once merged only `deprecated` may be added.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "url",
+    "release_url",
+    "sha256",
+    "size",
+    "host_compat"
+  ],
+  "properties": {
+    "version": {
+      "description": "Semantic version without build metadata; equals the file name and manifest.version.",
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?$"
+    },
+    "url": {
+      "description": "Release asset of the plugin's repo: https://github.com/<repo>/releases/download/<tag>/<file>.s2plugin",
+      "type": "string",
+      "pattern": "^https://github\\.com/[^/]+/[^/]+/releases/download/[^/\\s?#]+/[^/\\s?#]+\\.s2plugin$"
+    },
+    "release_url": {
+      "description": "The GitHub Release page of the same repo and tag: https://github.com/<repo>/releases/tag/<tag>; shown in the store as the release notes link.",
+      "type": "string",
+      "pattern": "^https://github\\.com/[^/]+/[^/]+/releases/tag/[^/\\s]+$"
+    },
+    "sha256": {
+      "description": "Lower-case hex SHA-256 of the .s2plugin file.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "size": {
+      "description": "Size of the .s2plugin file in bytes (at most PluginPackageMaxBytes, 64 MiB).",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 67108864
+    },
+    "host_compat": {
+      "description": "manifest.hostCompat, a semver constraint on the core version.",
+      "type": "string",
+      "minLength": 1
+    },
+    "source_digest": {
+      "description": "The digest of the plugin sources the package was built from, read from its source.json (written by sub2api-plugin pack); absent for packages without one.",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "deprecated": {
+      "$ref": "#/$defs/deprecated"
+    }
+  },
+  "$defs": {
+    "localized": {
+      "description": "Text per language: zh and en are required, other language keys are allowed.",
+      "type": "object",
+      "required": [
+        "zh",
+        "en"
+      ],
+      "properties": {
+        "zh": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "en": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "deprecated": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reason"
+      ],
+      "properties": {
+        "reason": {
+          "$ref": "#/$defs/localized"
+        }
+      }
+    }
+  }
+}

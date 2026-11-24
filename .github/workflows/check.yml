@@ -1,0 +1,123 @@
+# Reviews a pull request with `sub2api-plugin registry check`, comments the
+# result on the PR and sets the needs-review label.
+#
+# Channels are branches (publish.yml). Registrations target develop (the
+# test channel); develop is promoted to main (the production channel) by a
+# pull request from this repository's develop branch, which is checked with
+# --promotion: its changes were each checked on develop. A new channel's
+# branch is added to the list below as well.
+#
+# pull_request_target: this file, the setup-tool action and the report
+# script come from the base branch (develop or main), and the token can
+# comment on fork PRs. The PR is checked out as data only (head/ = its merge
+# ref, base/ = its base commit); nothing from head/ is ever executed.
+name: check
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+    branches: [develop, main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write # addLabels creates needs-review on first use
+
+concurrency:
+  group: check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  registry-check:
+    runs-on: ubuntu-latest
+    env:
+      # Only maintainers can push this repository's develop branch.
+      PROMOTION: ${{ github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository }}
+    steps:
+      - name: Checkout workflow sources (base branch)
+        id: trusted
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          path: trusted
+          sparse-checkout: .github
+          persist-credentials: false
+
+      - name: Only promotions target main
+        id: target
+        env:
+          BASE: ${{ github.event.pull_request.base.ref }}
+        run: |
+          if [ "$BASE" = main ] && [ "$PROMOTION" != true ]; then
+            echo "::error::versions are registered on develop only; main takes the promotion pull request from this repository's develop branch"
+            exit 1
+          fi
+
+      - name: Checkout PR merge tree (data only)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          path: head
+          persist-credentials: false
+
+      - name: Checkout PR base (data only)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+          persist-credentials: false
+
+      - name: Refuse symlinks in the PR
+        run: |
+          links=$(find head -path head/.git -prune -o -type l -print)
+          if [ -n "$links" ]; then
+            echo "::error::symlinks are not allowed in the registry:"; echo "$links"
+            exit 1
+          fi
+
+      - name: Build sub2api-plugin
+        id: tool
+        uses: ./trusted/.github/actions/setup-tool
+
+      - name: Registry check
+        id: check
+        env:
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out
+          promotion=
+          if [ "$PROMOTION" = true ]; then promotion=--promotion; fi
+          # The verdict comes from result.json (ok); a failing exit is reported below.
+          sub2api-plugin registry check --registry head --base base --author "$AUTHOR" $promotion \
+            --summary out/summary.md --json > out/result.json || echo "registry check exited with $?"
+          cat out/summary.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: CODEOWNERS is up to date
+        id: codeowners
+        if: always() && steps.check.outcome == 'success'
+        run: |
+          sub2api-plugin registry codeowners --registry head > out/CODEOWNERS.expected
+          if ! diff -u head/CODEOWNERS out/CODEOWNERS.expected; then
+            echo "::error file=CODEOWNERS::CODEOWNERS is out of date; run: sub2api-plugin registry codeowners --registry . > CODEOWNERS"
+            exit 1
+          fi
+
+      - name: Index builds
+        id: index
+        if: always() && steps.check.outcome == 'success'
+        run: sub2api-plugin index --registry head --out out/index.json
+
+      - name: Comment and label
+        if: always() && steps.trusted.outcome == 'success'
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        env:
+          TARGET_OUTCOME: ${{ steps.target.outcome }}
+          CODEOWNERS_OUTCOME: ${{ steps.codeowners.outcome }}
+          INDEX_OUTCOME: ${{ steps.index.outcome }}
+        with:
+          script: |
+            const report = require('./trusted/.github/scripts/report.js');
+            await report({ github, context, dir: 'out' });
+
+      - name: Verdict
+        run: jq -e '.ok == true' out/result.json > /dev/null || { echo "::error::registry check failed; see the PR comment"; exit 1; }

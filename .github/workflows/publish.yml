@@ -1,0 +1,77 @@
+# A channel of the store is a branch of this repository. A push to a channel
+# branch regenerates its index.json and pushes it to the branch
+# index-<branch> (an orphan branch holding only index.json), read from
+#
+#   https://raw.githubusercontent.com/touwaeriol/sup2api-plugin/index-<branch>/index.json
+#
+# main -> index-main, develop -> index-develop. Another channel only needs its
+# branch added to the list below (and to check.yml's). A manual run publishes
+# the branch it is run on (never a tag).
+name: publish
+
+on:
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  index:
+    # A manual run from a tag is refused: channels are branches.
+    if: github.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    env:
+      INDEX_BRANCH: index-${{ github.ref_name }}
+    steps:
+      - name: Channel branch name
+        # The core accepts channel branches matching ^[A-Za-z0-9._-]{1,64}$ without "..".
+        run: |
+          if ! printf '%s' "$GITHUB_REF_NAME" | grep -Eqx '[A-Za-z0-9._-]{1,64}' || [[ "$GITHUB_REF_NAME" == *..* ]]; then
+            echo "::error::$GITHUB_REF_NAME cannot be a channel branch"; exit 1
+          fi
+
+      - name: Checkout registry
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          path: registry
+          persist-credentials: false
+
+      - name: Build sub2api-plugin
+        uses: ./registry/.github/actions/setup-tool
+
+      - name: Generate index.json
+        run: sub2api-plugin index --registry registry --out "$RUNNER_TEMP/index.json"
+
+      - name: Push to the channel's index branch
+        working-directory: registry
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEW: ${{ runner.temp }}/index.json
+          WT: ${{ runner.temp }}/index-branch
+        run: |
+          # The token is used by this step's git commands only.
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          echo "::add-mask::$auth"
+          export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.https://github.com/.extraheader GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth"
+          if git ls-remote --exit-code --heads origin "$INDEX_BRANCH" > /dev/null; then
+            git fetch --depth=1 origin "$INDEX_BRANCH"
+            git worktree add --detach "$WT" FETCH_HEAD
+          else
+            git worktree add --orphan -b "$INDEX_BRANCH" "$WT"
+          fi
+          cd "$WT"
+          # generated_at changes on every run; compare everything else.
+          if [ -f index.json ] && cmp -s <(jq -S 'del(.generated_at)' index.json) <(jq -S 'del(.generated_at)' "$NEW"); then
+            echo "index.json unchanged; nothing to push"; exit 0
+          fi
+          cp "$NEW" index.json
+          git add index.json
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit -q -m "index: regenerate from $GITHUB_REF_NAME ${GITHUB_SHA::12}"
+          git push origin "HEAD:refs/heads/$INDEX_BRANCH"

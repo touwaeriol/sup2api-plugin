@@ -1,0 +1,11 @@
+{
+  "id": "sub2api",
+  "name": {
+    "zh": "Sub2API 官方",
+    "en": "Sub2API"
+  },
+  "homepage": "https://github.com/touwaeriol/sup2api",
+  "github": ["touwaeriol"],
+  "trust": "official",
+  "status": "active"
+}

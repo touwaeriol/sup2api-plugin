@@ -1,0 +1,14 @@
+{
+  "key": "vertex",
+  "publisher": "sub2api",
+  "name": {
+    "zh": "Vertex AI",
+    "en": "Vertex AI"
+  },
+  "description": {
+    "zh": "通过 Google Cloud Vertex AI 为内置 gemini 平台提供 Gemini（generateContent、streamGenerateContent、countTokens；v1 的调用发往 Vertex AI v1，v1beta 的发往 v1beta1）。账号可用服务账号密钥、用户的应用默认凭证或 Vertex AI API Key 鉴权。访问令牌由核心获取和续期，插件自身不发起任何网络连接。模型价格由管理员在核心中配置。",
+    "en": "Gemini on Google Cloud Vertex AI for the built-in gemini platform (generateContent, streamGenerateContent, countTokens; a v1 call goes to Vertex AI v1, a v1beta call to v1beta1). Accounts authorize with a service account key, a user's application default credentials or a Vertex AI API key. Access tokens are fetched and renewed by the core; the plugin itself makes no network connection. Model prices are set by administrators in the core."
+  },
+  "repo": "touwaeriol/sup2api",
+  "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/vertex"
+}

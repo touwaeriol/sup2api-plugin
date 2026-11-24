@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/touwaeriol/sup2api-plugin/main/schemas/publisher.schema.json",
+  "title": "Sub2API plugin registry publisher",
+  "description": "publishers/<id>.json; id must equal the file name and the publisher field of the publisher's plugin manifests.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "github",
+    "trust",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "description": "Lower-case letters and digits with single inner underscores, at most 25 bytes: no hyphen, no double or trailing underscore. Together with a plugin key (at least 2 bytes), the plugin id _<publisher>__<key> must be at most 30 bytes.",
+      "type": "string",
+      "maxLength": 25,
+      "pattern": "^[a-z0-9](_?[a-z0-9])*$"
+    },
+    "name": {
+      "$ref": "#/$defs/localized"
+    },
+    "homepage": {
+      "type": "string",
+      "pattern": "^https://\\S+$"
+    },
+    "github": {
+      "description": "GitHub logins allowed to submit versions of this publisher's plugins (used by the PR check and CODEOWNERS; also copied into index.json, where the console shows them).",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "description": "GitHub login: letters, digits and single hyphens, not starting or ending with a hyphen, at most 39 characters.",
+        "type": "string",
+        "maxLength": 39,
+        "pattern": "^[A-Za-z0-9](?:-?[A-Za-z0-9]){0,38}$"
+      }
+    },
+    "trust": {
+      "enum": [
+        "official",
+        "verified",
+        "community"
+      ]
+    },
+    "status": {
+      "enum": [
+        "active",
+        "revoked"
+      ]
+    }
+  },
+  "$defs": {
+    "localized": {
+      "description": "Text per language: zh and en are required, other language keys are allowed.",
+      "type": "object",
+      "required": [
+        "zh",
+        "en"
+      ],
+      "properties": {
+        "zh": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "en": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}
