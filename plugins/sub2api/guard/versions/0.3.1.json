@@ -1,0 +1,9 @@
+{
+  "version": "0.3.1",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-guard-v0.3.1/guard-0.3.1.s2plugin",
+  "sha256": "6db632ffecae2d1c86d2f0dc9f8d206567273fd855d542bd48ee7f5bfc994760",
+  "size": 15351010,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-guard-v0.3.1",
+  "source_digest": "sha256:ade3b4291671102fe8c2a117dfc11e646eb5beea4a4da0dc07ba99b2a60a0858"
+}

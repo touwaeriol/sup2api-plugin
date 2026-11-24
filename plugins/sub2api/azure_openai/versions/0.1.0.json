@@ -1,0 +1,9 @@
+{
+  "version": "0.1.0",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-azure_openai-v0.1.0/azure_openai-0.1.0.s2plugin",
+  "sha256": "969d4541981258d7650620e6fe1ff67cdadeffd7de9414aee58fea6414273e6e",
+  "size": 15150174,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-azure_openai-v0.1.0",
+  "source_digest": "sha256:bac50cef902341560878afe3ed8c24ca42726c50e9571940c5a128fc759d5745"
+}

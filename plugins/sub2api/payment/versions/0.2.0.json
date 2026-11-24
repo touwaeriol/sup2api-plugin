@@ -1,0 +1,9 @@
+{
+  "version": "0.2.0",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-payment-v0.2.0/payment-0.2.0.s2plugin",
+  "sha256": "73bdc16dfdea31a93990b53e8347171bfe359d1e590c4a1b479a2083f58a578a",
+  "size": 15291190,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-payment-v0.2.0",
+  "source_digest": "sha256:6264f9127876c11a59ba28a4cf087489ca3f3778049a1efbc1ada5edf15b08cb"
+}

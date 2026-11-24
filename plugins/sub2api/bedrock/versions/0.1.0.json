@@ -1,0 +1,9 @@
+{
+  "version": "0.1.0",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-bedrock-v0.1.0/bedrock-0.1.0.s2plugin",
+  "sha256": "3f58c1027b1c873c7a575114262f7b56325f773afc7a123f08898832639163ae",
+  "size": 15212705,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-bedrock-v0.1.0",
+  "source_digest": "sha256:a1ebcf2a58e5929dc650d7f85669ba199e93dab3df776aacb9cab9b792d4e628"
+}

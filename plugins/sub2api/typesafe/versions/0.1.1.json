@@ -1,0 +1,9 @@
+{
+  "version": "0.1.1",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-typesafe-v0.1.1/typesafe-0.1.1.s2plugin",
+  "sha256": "0ea96bfcdec23f4bbb9891c99147419a0f22979cd64a6131a4e79d30387e2d86",
+  "size": 15150996,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-typesafe-v0.1.1",
+  "source_digest": "sha256:143aea9a4595d6c2ec13894fb0d5acb2d6b1a4b0888ddc303e9d00d2b4d48fa1"
+}
