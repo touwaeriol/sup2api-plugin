@@ -6,7 +6,7 @@
 #
 # main -> index-main, develop -> index-develop. Another channel only needs its
 # branch added to the list below (and to check.yml's). A manual run publishes
-# the branch it is run on.
+# the branch it is run on (never a tag).
 name: publish
 
 on:
@@ -23,6 +23,8 @@ concurrency:
 
 jobs:
   index:
+    # A manual run from a tag is refused: channels are branches.
+    if: github.ref_type == 'branch'
     runs-on: ubuntu-latest
     env:
       INDEX_BRANCH: index-${{ github.ref_name }}

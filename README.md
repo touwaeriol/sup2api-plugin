@@ -18,7 +18,7 @@ https://raw.githubusercontent.com/touwaeriol/sup2api-plugin/index-<branch>/index
 （raw.githubusercontent.com 有几分钟的缓存，合并后稍等即可。）
 
 - **登记版本**：向 `develop` 提 PR（见 [CONTRIBUTING.md](CONTRIBUTING.md)），检查通过、合并后几分钟出现在测试频道。
-- **晋级**：在测试频道验证过后，维护者从本仓库的 `develop` 向 `main` 提 PR（不要从 fork 提）。检查以 `--promotion` 运行：其中每个改动都已在 `develop` 上单独检查过，所以不再查提交者、不限一个发布者、不重新下载包，只校验全部文件并要求已发布的版本文件不变（只能加 `deprecated`），新增的版本逐个列出、标为需人工审核。合并后进入正式频道。`main` 上不直接登记版本。
+- **晋级**：在测试频道验证过后，维护者从本仓库的 `develop` 向 `main` 提 PR（不要从 fork 提）。检查以 `--promotion` 运行：其中每个改动都已在 `develop` 上单独检查过，所以不再查提交者、不限一个发布者、不重新下载包，只校验全部文件并要求已发布的版本文件不变（只能加 `deprecated`），新增的版本逐个列出、标为需人工审核。合并后进入正式频道。版本只登记到 `develop`：目标为 `main` 的其他 PR 检查直接失败。
 - **加频道**：把分支名加进 `.github/workflows/publish.yml` 和 `check.yml` 的分支列表即可（分支名只用字母、数字、`.`、`_`、`-`，最长 64 个字符，不含 `..`）。
 
 商店不使用任何签名密钥：可信来源就是本仓库（每次改动经 PR 审核）加上索引里审核过的 sha256。核心安装时按索引里的 sha256 校验下载到的包，信任级别取该插件发布者的 `trust`。
@@ -37,7 +37,7 @@ CODEOWNERS                              由 sub2api-plugin registry codeowners �
 
 各文件的字段见 `schemas/`，要点：
 
-- **插件身份**是发布者加 key：两个发布者可以各有一个同名 key 的插件，按目录区分。发布者 id 只用小写字母、数字和单个 `_`（不以 `_` 结尾，最长 27 个字符）；发布者 `sub2api` 的插件 id 就是 key，其他发布者的插件 id 是 `_<publisher>__<key>`，不能超过 30 个字符。命令行里写插件用 `<publisher>/<key>`，只写 key 指 `sub2api` 的插件。
+- **插件身份**是发布者加 key：两个发布者可以各有一个同名 key 的插件，按目录区分。发布者 id 最多 27 个小写字母和数字，中间可以有单个 `_`（不以 `_` 结尾）；发布者 `sub2api` 的插件 id 就是 key，其他发布者的插件 id 是 `_<publisher>__<key>`，不能超过 30 字节。命令行里写插件用 `<publisher>/<key>`，只写 key 指 `sub2api` 的插件。
 - **发布者**：`id`、中英文 `name`、可选 `homepage`、`github`（允许为该发布者提交版本的 GitHub 账号，只给 CI 用，不进索引）、`trust`（`official` / `verified` / `community`）、`status`（`active` / `revoked`；撤销后其插件在商店中被标记且不能安装）。
 - **插件**：`key`、`publisher`、中英文 `name` 与 `description`、`repo`（`owner/name`，包只能来自这个仓库的 Release）、可选 `source`、`builtin`、`deprecated`。
 - **版本**：`version`（语义化版本，不带 `+build` 后缀）、`url`（必须是 `https://github.com/<repo>/releases/download/<tag>/<文件>.s2plugin`）、`release_url`（同一 tag 的 Release 页面 `https://github.com/<repo>/releases/tag/<tag>`，商店里作为“更新说明”链接）、`sha256`、`size`、`host_compat`、可选 `source_digest`（包里 `source.json` 记录的源码摘要，`sub2api-plugin pack` 写入；sup2api 的 CI 用它发现“源码变了却没升版本”）、可选 `deprecated`。版本文件合并后不能再改，只能新增 `deprecated` 字段。
@@ -69,8 +69,8 @@ CODEOWNERS                              由 sub2api-plugin registry codeowners �
 
 | 工作流 | 触发 | 作用 |
 |---|---|---|
-| `check.yml` | `pull_request_target`（目标分支 `develop`、`main`；opened、synchronize、reopened、edited） | job `registry-check`：运行 `registry check`、核对 `CODEOWNERS`、试生成索引；把摘要发成 PR 评论（同一条评论持续更新），按结果打或去掉 `needs-review` 标签；检查不通过则 job 失败 |
-| `publish.yml` | push 到频道分支（`develop`、`main`）、手动触发（发布所在分支） | 生成该分支的 `index.json` 并推到 `index-<branch>`；内容（除 `generated_at` 外）没变化就不推 |
+| `check.yml` | `pull_request_target`（目标分支 `develop`、`main`；opened、synchronize、reopened、edited） | job `registry-check`：目标为 `main` 而不是本仓库 `develop` 晋级的 PR 直接失败；运行 `registry check`、核对 `CODEOWNERS`、试生成索引；把摘要发成 PR 评论（同一条评论持续更新），按结果打或去掉 `needs-review` 标签；检查不通过则 job 失败 |
+| `publish.yml` | push 到频道分支（`develop`、`main`）、手动触发（发布所在分支，不接受 tag） | 生成该分支的 `index.json` 并推到 `index-<branch>`；内容（除 `generated_at` 外）没变化就不推 |
 
 `check.yml` 用 `pull_request_target`，这样来自 fork 的 PR 也能收到评论和标签。它的安全前提是**绝不执行 PR 里的任何代码**：工作流文件、`setup-tool` action 和评论脚本都来自 PR 的目标分支（`develop` 或 `main`）；PR 只作为数据检出（`head/` 是 PR 与目标分支合并后的树 `refs/pull/<n>/merge`，`base/` 是 PR 的基线提交），含符号链接的 PR 直接拒绝。修改 `.github/` 下的文件时务必保持这一点。PR 改动 `.github/` 等目录不会影响本次检查本身（检查用的是目标分支上的版本），工具也会把这类改动标为需人工审核。
 

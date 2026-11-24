@@ -30,6 +30,9 @@ concurrency:
 jobs:
   registry-check:
     runs-on: ubuntu-latest
+    env:
+      # Only maintainers can push this repository's develop branch.
+      PROMOTION: ${{ github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - name: Checkout workflow sources (base branch)
         id: trusted
@@ -38,6 +41,16 @@ jobs:
           path: trusted
           sparse-checkout: .github
           persist-credentials: false
+
+      - name: Only promotions target main
+        id: target
+        env:
+          BASE: ${{ github.event.pull_request.base.ref }}
+        run: |
+          if [ "$BASE" = main ] && [ "$PROMOTION" != true ]; then
+            echo "::error::versions are registered on develop only; main takes the promotion pull request from this repository's develop branch"
+            exit 1
+          fi
 
       - name: Checkout PR merge tree (data only)
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -70,8 +83,6 @@ jobs:
         env:
           AUTHOR: ${{ github.event.pull_request.user.login }}
           GITHUB_TOKEN: ${{ github.token }}
-          # Only maintainers can push this repository's develop branch.
-          PROMOTION: ${{ github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository }}
         run: |
           mkdir -p out
           promotion=
@@ -100,6 +111,7 @@ jobs:
         if: always() && steps.trusted.outcome == 'success'
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         env:
+          TARGET_OUTCOME: ${{ steps.target.outcome }}
           CODEOWNERS_OUTCOME: ${{ steps.codeowners.outcome }}
           INDEX_OUTCOME: ${{ steps.index.outcome }}
         with:

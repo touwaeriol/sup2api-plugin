@@ -28,6 +28,7 @@ function parse(text) {
 
 function render({ result, summary, sha, base, runUrl }) {
   const extra = [
+    ['目标分支（版本只登记到 develop，main 只接受从本仓库 develop 晋级的 PR）', process.env.TARGET_OUTCOME],
     ['CODEOWNERS 与生成结果一致', process.env.CODEOWNERS_OUTCOME],
     ['索引可以生成', process.env.INDEX_OUTCOME],
   ].filter(([, outcome]) => outcome && outcome !== 'success');

@@ -27,7 +27,7 @@ sub2api-plugin index --registry . --out index.json                            # 
 
 ## 一、发布者入驻（需人工审核）
 
-1. Fork 本仓库，从 `develop` 开分支，新建 `publishers/<id>.json`。`id` 就是你插件清单（`manifest.json`）里的 `publisher`，只用小写字母、数字和单个 `_`（不能有 `-`、`__`，不以 `_` 结尾，最长 27 个字符）：
+1. Fork 本仓库，从 `develop` 开分支，新建 `publishers/<id>.json`。`id` 就是你插件清单（`manifest.json`）里的 `publisher`，最多 27 个小写字母和数字，中间可以有单个 `_`（不能有 `-`、`__`，不以 `_` 结尾）；它和插件 key 合起来的插件 id `_<publisher>__<key>` 不能超过 30 字节：
 
    ```json
    {
@@ -61,7 +61,7 @@ sub2api-plugin index --registry . --out index.json                            # 
 ```
 
 - `repo`：发布插件包的 GitHub 仓库。商店只接受这个仓库 Release 上的包，改 `repo` 需要人工审核。
-- 插件 id 是 `_<publisher>__<key>`（上例 `_acme__hello`），不能超过 30 个字符，发布者 id 加 key 太长时缩短 key。
+- 插件 id 是 `_<publisher>__<key>`（上例 `_acme__hello`），不能超过 30 字节，发布者 id 加 key 太长时缩短 key。
 - 可选放一个 `plugins/<publisher>/<key>/icon.svg`。
 - 同时按下一节登记第一个版本，并更新 `CODEOWNERS`。
 

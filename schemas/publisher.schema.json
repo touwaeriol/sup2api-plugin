@@ -14,7 +14,7 @@
   ],
   "properties": {
     "id": {
-      "description": "Lower-case letters and digits with single inner underscores, at most 27 bytes: no hyphen, no double or trailing underscore.",
+      "description": "At most 27 lower-case letters and digits, with single inner underscores: no hyphen, no double or trailing underscore. Together with a plugin key, the plugin id _<publisher>__<key> must be at most 30 bytes.",
       "type": "string",
       "pattern": "^[a-z0-9](_?[a-z0-9]){0,26}$"
     },
