@@ -1,0 +1,9 @@
+{
+  "version": "0.5.0",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-openai-v0.5.0/openai-0.5.0.s2plugin",
+  "sha256": "7392f07b61456297157e9f87df93f8c9e7d9029ae979f90cdc4b3c7086135a61",
+  "size": 15138880,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-openai-v0.5.0",
+  "source_digest": "sha256:9e5cdf9ad7395169467495e318b4f269d3b6b2584bccc7a0d37713e073ae4e7b"
+}

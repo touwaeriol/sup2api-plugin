@@ -1,0 +1,9 @@
+{
+  "version": "0.1.2",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-newapi-v0.1.2/newapi-0.1.2.s2plugin",
+  "sha256": "0124f3a371edee13009cbb9835d3a6058ee35fa748f21e9fe498cd020d615165",
+  "size": 15375914,
+  "host_compat": ">=0.1.312 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-newapi-v0.1.2",
+  "source_digest": "sha256:cb18a39f6f3b63bd99143d82cf93b4ed436f5348039a8225a3d69f44efea7063"
+}

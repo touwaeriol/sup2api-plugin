@@ -1,0 +1,9 @@
+{
+  "version": "0.4.1",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-gemini-v0.4.1/gemini-0.4.1.s2plugin",
+  "sha256": "64d3da7bdb3c74e27864fcc18668da0da1d3990ea3287709f1e81227cb6bb987",
+  "size": 15339854,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-gemini-v0.4.1",
+  "source_digest": "sha256:633becb00ee6d162c7a6f9912badb449f00eb91c9fbc497d463b65b8f1c27634"
+}

@@ -1,0 +1,9 @@
+{
+  "version": "0.1.2",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-sub2api-v0.1.2/sub2api-0.1.2.s2plugin",
+  "sha256": "576cd4e156a723ddcdbb34dd8b023fe8391b8c88efe8610cde9abdf50b691108",
+  "size": 15389339,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-sub2api-v0.1.2",
+  "source_digest": "sha256:6277161ced5f8f65bb5bfcca7ee4e77eba059a5015caadc02fd6ba32a7375da5"
+}

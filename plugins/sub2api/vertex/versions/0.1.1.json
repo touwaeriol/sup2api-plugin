@@ -1,0 +1,9 @@
+{
+  "version": "0.1.1",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-vertex-v0.1.1/vertex-0.1.1.s2plugin",
+  "sha256": "be2d53b8a082a3cd0f9a863750cee08832b315b2094eb48861cc85bf2bcb3e43",
+  "size": 15330868,
+  "host_compat": ">=0.1.312 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-vertex-v0.1.1",
+  "source_digest": "sha256:f5b37efc626ad3341c17757ff9bcae24c7c945b55ccc95dd0cb4aea9330f1210"
+}

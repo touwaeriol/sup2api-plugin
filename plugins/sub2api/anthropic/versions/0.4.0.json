@@ -1,0 +1,9 @@
+{
+  "version": "0.4.0",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-anthropic-v0.4.0/anthropic-0.4.0.s2plugin",
+  "sha256": "eb0719bb0ed6955266c444abb84cf511f9ecb6d73d721fa3f0d96b660c025108",
+  "size": 15117676,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-anthropic-v0.4.0",
+  "source_digest": "sha256:8dfa359ab7aa1019be64906bc315c01e70bd8cbc9a6fea7a0f3bcdaf88b9420f"
+}

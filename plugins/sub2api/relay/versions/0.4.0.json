@@ -1,0 +1,9 @@
+{
+  "version": "0.4.0",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-relay-v0.4.0/relay-0.4.0.s2plugin",
+  "sha256": "84a9f266581f4482352b2dd5cbf8b089f05b513af3ce4d649ff0f32820dbd333",
+  "size": 15138904,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-relay-v0.4.0",
+  "source_digest": "sha256:059333811a9eadc931976e3655a65e4e2258acfb01ab9bfb3bd45f90a310d734"
+}
