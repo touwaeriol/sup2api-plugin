@@ -1,0 +1,271 @@
+{
+  "version": 2,
+  "generated_at": "2026-11-24T08:50:19Z",
+  "publishers": [
+    {
+      "id": "sub2api",
+      "name": {
+        "en": "Sub2API",
+        "zh": "Sub2API 官方"
+      },
+      "homepage": "https://github.com/touwaeriol/sup2api",
+      "github": [
+        "touwaeriol"
+      ],
+      "trust": "official",
+      "status": "active"
+    }
+  ],
+  "plugins": [
+    {
+      "key": "anthropic",
+      "publisher": "sub2api",
+      "name": {
+        "en": "Anthropic",
+        "zh": "Anthropic"
+      },
+      "description": {
+        "en": "Anthropic API key account type. The anthropic platform and its endpoints are built into the core; the plugin builds the upstream requests of its accounts and the core sends them. Model prices are set by administrators in the core.",
+        "zh": "Anthropic API Key 账号类型（anthropic 平台及其端点由核心内置；插件构造本类型账号的上游请求，由核心发送；模型价格由管理员在核心中配置）。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/anthropic",
+      "builtin": true,
+      "versions": []
+    },
+    {
+      "key": "azure_openai",
+      "publisher": "sub2api",
+      "name": {
+        "en": "Azure OpenAI",
+        "zh": "Azure OpenAI"
+      },
+      "description": {
+        "en": "Adds Azure OpenAI account types for the built-in openai platform: a resource endpoint with its API key, served through the v1 API or the classic per-deployment API. The upstream model is the deployment name; map client model names to deployments on the account. The plugin builds each request and the core sends it; the plugin itself makes no network connection. Declares no platform, no endpoints and no prices.",
+        "zh": "为内置 openai 平台新增 Azure OpenAI 账号类型：资源地址加 API Key，走 v1 接口或按部署的经典接口。上游的模型就是部署名，在账号上把客户端的模型名映射到部署名。插件构造每个请求、由核心发送，插件自身不发起任何网络连接。不声明平台、端点和价格。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/azure-openai",
+      "versions": []
+    },
+    {
+      "key": "bedrock",
+      "publisher": "sub2api",
+      "name": {
+        "en": "AWS Bedrock",
+        "zh": "AWS Bedrock"
+      },
+      "description": {
+        "en": "Claude on Amazon Bedrock, through InvokeModel, for the built-in anthropic platform; requests in an OpenAI protocol are converted by the core. Accounts authorize with a Bedrock API key, a long-term access key or temporary credentials; the plugin signs requests of the latter two (SigV4). The plugin builds the final request and the core sends it: the plugin itself makes no network connection. Model prices are set by administrators in the core.",
+        "zh": "Amazon Bedrock 上的 Claude：为内置 anthropic 平台通过 InvokeModel 提供，OpenAI 协议的请求由核心转换后走同一条路。账号可用 Bedrock API Key、长期 Access Key 或临时凭证鉴权，后两种的请求由插件签名（SigV4）。插件构造最终请求、由核心发送，插件自身不发起任何网络连接。模型价格由管理员在核心中配置。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/bedrock",
+      "versions": []
+    },
+    {
+      "key": "codex",
+      "publisher": "sub2api",
+      "name": {
+        "en": "ChatGPT (Codex)",
+        "zh": "ChatGPT（Codex）"
+      },
+      "description": {
+        "en": "Serves /v1/responses (including its WebSocket mode) and, through the core's conversion, /v1/chat/completions, /v1/images/generations and /v1/images/edits (the Responses image_generation tool; use the image model gpt-image-2) from your own ChatGPT subscription through the Codex CLI's logins: device code or Sign in with Codex. Only for the account owner's own use with their own ChatGPT subscription; do not pool several people's accounts or resell access (this violates OpenAI's terms). By default requests identify themselves truthfully as sup2api (originator: sup2api, User-Agent: sup2api-codex/<version>); both can be set per account or in the plugin settings. The plugin sends no x-codex-* headers, does not imitate the Codex CLI's TLS fingerprint and adds no Codex system prompt.",
+        "zh": "用你自己的 ChatGPT 订阅提供 /v1/responses（含 WebSocket 模式），并经核心转换提供 /v1/chat/completions、/v1/images/generations 和 /v1/images/edits（Responses 的 image_generation 工具；生图模型写 gpt-image-2）；通过 Codex CLI 的登录方式授权：设备码登录或 Sign in with Codex。仅用于账号所有者用自己的 ChatGPT 订阅自用；不得把多人账号做成号池对外出售（违反 OpenAI 条款）。请求默认如实标明来源为 sup2api（originator: sup2api，User-Agent: sup2api-codex/<版本>），两者都可以在账号上或插件设置中自定义。插件不发 x-codex-* 头、不仿 Codex CLI 的 TLS 指纹，也不注入 Codex 系统提示词。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/codex",
+      "builtin": true,
+      "versions": []
+    },
+    {
+      "key": "dynweight",
+      "publisher": "sub2api",
+      "name": {
+        "en": "Dynamic Weight",
+        "zh": "动态权重"
+      },
+      "description": {
+        "en": "Lowers the scheduling weight of an account in a group and model while it fails or slows down, and brings it back once healthy. Each (account, group, client model) is counted per window and judged by configurable rules (error rate, first token and whole attempt percentiles, the weight itself) and strategies (degrade, climb, clear sticky sessions). Turning points can be notified through a core notification channel.",
+        "zh": "账号在某个分组和模型下出错或变慢时降低其调度权重，恢复健康后再逐步抬回。每个（账号、分组、客户端模型）按窗口计数，由可配置的规则（错误率、首字与整次耗时分位、权重本身）和策略（降权、回升、清理粘性会话）判定。权重拐点可经核心通知渠道发送通知。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/dynweight",
+      "builtin": true,
+      "versions": []
+    },
+    {
+      "key": "gemini",
+      "publisher": "sub2api",
+      "name": {
+        "en": "Gemini",
+        "zh": "Gemini"
+      },
+      "description": {
+        "en": "Gemini API key account type. The gemini platform and its endpoints (/v1beta/models/{model} and /v1/models/{model} with :generateContent, :streamGenerateContent, :countTokens, :embedContent, :batchEmbedContents; each version goes upstream on the same version) are built into the core; model prices are set by administrators in the core.",
+        "zh": "Gemini API Key 账号类型（gemini 平台及其端点 /v1beta/models/{model} 与 /v1/models/{model} 的 :generateContent、:streamGenerateContent、:countTokens、:embedContent、:batchEmbedContents 由核心内置，各版本原样发往上游同一版本；模型价格由管理员在核心中配置）。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/gemini",
+      "builtin": true,
+      "versions": []
+    },
+    {
+      "key": "guard",
+      "publisher": "sub2api",
+      "name": {
+        "en": "Guard",
+        "zh": "请求守卫"
+      },
+      "description": {
+        "en": "Blocks gateway requests whose prompt matches keyword or regex rules, counts traffic from usage events, and shows a dashboard.",
+        "zh": "按关键词或正则规则拦截网关请求，基于用量事件统计流量，并提供统计大盘。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/guard",
+      "versions": []
+    },
+    {
+      "key": "mailer",
+      "publisher": "sub2api",
+      "name": {
+        "en": "Mailer",
+        "zh": "邮件"
+      },
+      "description": {
+        "en": "Delivers the core's and other plugins' notifications by email over SMTP (notification channel \"email\").",
+        "zh": "通过 SMTP 以邮件发送核心和其他插件的通知（通知渠道「邮件」）。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/mailer",
+      "builtin": true,
+      "versions": []
+    },
+    {
+      "key": "moderation",
+      "publisher": "sub2api",
+      "name": {
+        "en": "Prompt Moderation",
+        "zh": "提示词审核"
+      },
+      "description": {
+        "en": "Moderates gateway requests with flows of auditors (OpenAI moderation, TypeSafe Jev, LLM verdict) bound to groups and accounts. Users on the always-check-first list and users at the enforce level are moderated before the upstream call and refused on a hit: a watch-list entry's own level decides, and without an entry the default level does - enforce when the mode is enforce, so then everyone without an entry is moderated first. Users on the background-only list and all other requests are moderated in the background. Suspicious users join the watch list automatically; repeated violations can ban them. The cost of every moderation call is shown with the core model prices.",
+        "zh": "按分组、分组下的账号或账号绑定的审核流程（OpenAI 内容审核、TypeSafe Jev、大模型判定）审核网关请求。“总是先审”名单的用户和拦截级的用户先审后发、命中即拒绝：有名单条目的按条目自己的级别，没有条目的按默认级别——模式为拦截时默认级别就是拦截级，此时所有没有条目的用户都先审。“只后台审核”名单的用户和其余请求在后台审核。可疑用户自动进入观察名单，多次违规可自动封禁。每次审核调用的费用按核心的模型价格展示。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/moderation",
+      "builtin": true,
+      "versions": []
+    },
+    {
+      "key": "newapi",
+      "publisher": "sub2api",
+      "name": {
+        "en": "New API",
+        "zh": "New API"
+      },
+      "description": {
+        "en": "Adds the \"New API\" account type: the API key of a New API site (your own Base URL) that serves the built-in openai (chat completions, responses including its WebSocket mode, embeddings, image generations and edits), anthropic (messages, count_tokens) and gemini (generateContent, streamGenerateContent, embedContent, batchEmbedContents on v1beta and v1; countTokens is not served, New API has none) platforms, and the typesafe platform of the TypeSafe plugin when it is enabled. Requests are forwarded in their own protocol as they are, with each protocol's official auth header; nothing is converted. The key's balance is read from the site and shown as the site's own quota number, without conversion. The plugin builds the upstream requests; the core sends them, so the plugin itself makes no network connection. Model prices are set by administrators in the core.",
+        "zh": "新增\"New API\"账号类型：New API 站点的 API Key（自填 Base URL），服务内置 openai（Chat Completions、Responses（含 WebSocket 模式）、Embeddings、生图与图片编辑）、anthropic（Messages、count_tokens）、gemini（v1beta 与 v1 的 generateContent、streamGenerateContent、embedContent、batchEmbedContents；New API 没有 countTokens，不服务）平台，TypeSafe 插件启用时还服务它的 typesafe 平台。请求按原协议原样转发，各协议用官方的鉴权头，不做任何转换。从站点读取 Key 的余额，显示站点自己的额度数字，不做换算。插件构造上游请求，由核心发送，插件自身不发起任何网络连接。模型价格由管理员在核心中配置。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/newapi",
+      "builtin": true,
+      "versions": []
+    },
+    {
+      "key": "openai",
+      "publisher": "sub2api",
+      "name": {
+        "en": "OpenAI",
+        "zh": "OpenAI"
+      },
+      "description": {
+        "en": "OpenAI API key account type for the built-in openai platform (/v1/chat/completions, /v1/responses including its WebSocket mode, /v1/embeddings, /v1/images/generations and the JSON form of /v1/images/edits). The plugin builds the upstream requests; the core sends them, so the plugin itself makes no network connection. Model prices are set by administrators in the core.",
+        "zh": "为内置 openai 平台提供 OpenAI API Key 账号类型（/v1/chat/completions、/v1/responses（含 WebSocket 模式）、/v1/embeddings、/v1/images/generations 和 JSON 形式的 /v1/images/edits）。插件构造上游请求，由核心发送，插件自身不发起任何网络连接。模型价格由管理员在核心中配置。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/openai",
+      "builtin": true,
+      "versions": []
+    },
+    {
+      "key": "payment",
+      "publisher": "sub2api",
+      "name": {
+        "en": "Payment & Recharge",
+        "zh": "充值支付"
+      },
+      "description": {
+        "en": "Online recharge orders, redeem codes and promo codes. Balance is credited through the host ledger.",
+        "zh": "在线充值订单、兑换码与优惠码，余额通过核心账本入账。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/payment",
+      "versions": []
+    },
+    {
+      "key": "relay",
+      "publisher": "sub2api",
+      "name": {
+        "en": "Claude relay",
+        "zh": "Claude 中转"
+      },
+      "description": {
+        "en": "Adds the \"Relay key\" account type: accounts of an Anthropic-compatible relay (your own Base URL and key) that serve the built-in anthropic platform (/v1/messages and /v1/messages/count_tokens) together with the other account types of a group. Declares no platform, no endpoints and no prices.",
+        "zh": "新增\"中转 Key\"账号类型：Anthropic 兼容中转站的账号（自定义 Base URL 和 Key），与分组里其他类型的账号一起为内置 anthropic 平台（/v1/messages 和 /v1/messages/count_tokens）提供服务。不声明平台、端点和价格。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/relay",
+      "versions": []
+    },
+    {
+      "key": "sub2api",
+      "publisher": "sub2api",
+      "name": {
+        "en": "Sub2API",
+        "zh": "Sub2API"
+      },
+      "description": {
+        "en": "Adds the \"Sub2API\" account type: the API key of another Sub2API site (the legacy release or sub2api-next, your own Base URL) that serves the built-in openai (chat completions, responses including its WebSocket mode, embeddings, image generations and edits), anthropic (messages, count_tokens) and gemini (generateContent, streamGenerateContent, countTokens, embedContent, batchEmbedContents on v1beta and v1) platforms. Requests are forwarded in their own protocol as they are, with each protocol's official auth header; nothing is converted. The key's balance is read from the site's GET /v1/usage. The plugin builds the upstream requests; the core sends them, so the plugin itself makes no network connection. Model prices are set by administrators in the core.",
+        "zh": "新增\"Sub2API\"账号类型：另一个 Sub2API 站点（旧版或 sub2api-next，自填 Base URL）的 API Key，服务内置 openai（Chat Completions、Responses（含 WebSocket 模式）、Embeddings、生图与图片编辑）、anthropic（Messages、count_tokens）、gemini（v1beta 与 v1 的 generateContent、streamGenerateContent、countTokens、embedContent、batchEmbedContents）平台。请求按原协议原样转发，各协议用官方的鉴权头，不做任何转换。从站点的 GET /v1/usage 读取 Key 的余额。插件构造上游请求，由核心发送，插件自身不发起任何网络连接。模型价格由管理员在核心中配置。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/sub2api",
+      "builtin": true,
+      "versions": []
+    },
+    {
+      "key": "typesafe",
+      "publisher": "sub2api",
+      "name": {
+        "en": "TypeSafe",
+        "zh": "TypeSafe"
+      },
+      "description": {
+        "en": "Adds the typesafe platform (POST /v1/systemone, the TypeSafe Jev API) and its API key account type. Requests are forwarded to TypeSafe as they are; usage is read from each answer's usage. The plugin builds the upstream requests; the core sends them, so the plugin itself makes no network connection. Model prices are set by administrators in the core.",
+        "zh": "新增 typesafe 平台（POST /v1/systemone，TypeSafe 的 Jev 接口）及其 API Key 账号类型。请求原样转发给 TypeSafe，用量取自每次应答的 usage。插件构造上游请求，由核心发送，插件自身不发起任何网络连接。模型价格由管理员在核心中配置。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/typesafe",
+      "builtin": true,
+      "versions": []
+    },
+    {
+      "key": "vertex",
+      "publisher": "sub2api",
+      "name": {
+        "en": "Vertex AI",
+        "zh": "Vertex AI"
+      },
+      "description": {
+        "en": "Gemini on Google Cloud Vertex AI for the built-in gemini platform (generateContent, streamGenerateContent, countTokens; a v1 call goes to Vertex AI v1, a v1beta call to v1beta1). Accounts authorize with a service account key, a user's application default credentials or a Vertex AI API key. Access tokens are fetched and renewed by the core; the plugin itself makes no network connection. Model prices are set by administrators in the core.",
+        "zh": "通过 Google Cloud Vertex AI 为内置 gemini 平台提供 Gemini（generateContent、streamGenerateContent、countTokens；v1 的调用发往 Vertex AI v1，v1beta 的发往 v1beta1）。账号可用服务账号密钥、用户的应用默认凭证或 Vertex AI API Key 鉴权。访问令牌由核心获取和续期，插件自身不发起任何网络连接。模型价格由管理员在核心中配置。"
+      },
+      "repo": "touwaeriol/sup2api",
+      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/vertex",
+      "versions": []
+    }
+  ]
+}
