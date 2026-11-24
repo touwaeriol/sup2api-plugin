@@ -37,7 +37,7 @@ CODEOWNERS                              由 sub2api-plugin registry codeowners �
 
 各文件的字段见 `schemas/`，要点：
 
-- **插件身份**是发布者加 key：两个发布者可以各有一个同名 key 的插件，按目录区分。发布者 id 最多 27 个小写字母和数字，中间可以有单个 `_`（不以 `_` 结尾）；发布者 `sub2api` 的插件 id 就是 key，其他发布者的插件 id 是 `_<publisher>__<key>`，不能超过 30 字节。命令行里写插件用 `<publisher>/<key>`，只写 key 指 `sub2api` 的插件。
+- **插件身份**是发布者加 key：两个发布者可以各有一个同名 key 的插件，按目录区分。发布者 id 由小写字母和数字组成，中间可以有单个 `_`（不以 `_` 结尾），至多 25 字节；发布者 `sub2api` 的插件 id 就是 key，其他发布者的插件 id 是 `_<publisher>__<key>`，不能超过 30 字节。命令行里写插件用 `<publisher>/<key>`，只写 key 指 `sub2api` 的插件。
 - **发布者**：`id`、中英文 `name`、可选 `homepage`、`github`（允许为该发布者提交版本的 GitHub 账号：CI 检查与 CODEOWNERS 用它，也写进索引，控制台会显示）、`trust`（`official` / `verified` / `community`）、`status`（`active` / `revoked`；撤销后其插件在商店中被标记且不能安装）。
 - **插件**：`key`、`publisher`、中英文 `name` 与 `description`、`repo`（`owner/name`，包只能来自这个仓库的 Release）、可选 `source`、`builtin`、`deprecated`。
 - **版本**：`version`（语义化版本，不带 `+build` 后缀）、`url`（必须是 `https://github.com/<repo>/releases/download/<tag>/<文件>.s2plugin`）、`release_url`（同一 tag 的 Release 页面 `https://github.com/<repo>/releases/tag/<tag>`，商店里作为“更新说明”链接）、`sha256`、`size`、`host_compat`、可选 `source_digest`（包里 `source.json` 记录的源码摘要，`sub2api-plugin pack` 写入；sup2api 的 CI 用它发现“源码变了却没升版本”）、可选 `deprecated`。版本文件合并后不能再改，只能新增 `deprecated` 字段。

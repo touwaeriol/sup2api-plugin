@@ -27,7 +27,7 @@ sub2api-plugin index --registry . --out index.json                            # 
 
 ## 一、发布者入驻（需人工审核）
 
-1. Fork 本仓库，从 `develop` 开分支，新建 `publishers/<id>.json`。`id` 就是你插件清单（`manifest.json`）里的 `publisher`，最多 27 个小写字母和数字，中间可以有单个 `_`（不能有 `-`、`__`，不以 `_` 结尾）；它和插件 key 合起来的插件 id `_<publisher>__<key>` 不能超过 30 字节：
+1. Fork 本仓库，从 `develop` 开分支，新建 `publishers/<id>.json`。`id` 就是你插件清单（`manifest.json`）里的 `publisher`，由小写字母和数字组成，中间可以有单个 `_`（不能有 `-`、`__`，不以 `_` 结尾），至多 25 字节；它和插件 key（至少 2 字节）合起来的插件 id `_<publisher>__<key>` 不能超过 30 字节：
 
    ```json
    {
