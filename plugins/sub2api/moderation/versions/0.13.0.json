@@ -1,0 +1,9 @@
+{
+  "version": "0.13.0",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-moderation-v0.13.0/moderation-0.13.0.s2plugin",
+  "sha256": "c78f9f440678df6181fad04fae259a801d7ab107b450676ca922ac395abe8515",
+  "size": 17108520,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-moderation-v0.13.0",
+  "source_digest": "sha256:593b2f9ab0eefa0e5a2695983e16e63c9ecee6060ac813b7c972982cabae8c51"
+}

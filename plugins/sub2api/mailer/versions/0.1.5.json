@@ -1,0 +1,9 @@
+{
+  "version": "0.1.5",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-mailer-v0.1.5/mailer-0.1.5.s2plugin",
+  "sha256": "afdf8318a020e774aeef2b3ffc9d97f59e20eddc43354737d0924b5f1a33fbe2",
+  "size": 15124734,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-mailer-v0.1.5",
+  "source_digest": "sha256:dc7303b2e69124a201d6206e74706d9801b594b09c2fdbadb496b29607297e88"
+}

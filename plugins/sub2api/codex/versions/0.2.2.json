@@ -1,0 +1,9 @@
+{
+  "version": "0.2.2",
+  "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-codex-v0.2.2/codex-0.2.2.s2plugin",
+  "sha256": "10d5fac5cf801ee0beddd932dd9dd83772ed452436e8876ab184852f32280876",
+  "size": 15264700,
+  "host_compat": ">=0.1.304 <0.2.0",
+  "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-codex-v0.2.2",
+  "source_digest": "sha256:f1810fb294780e9e11bdbb4de23f664b54765572551f7b8171a705fb6e84bf80"
+}
