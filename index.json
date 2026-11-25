@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-11-24T13:29:27Z",
+  "generated_at": "2026-11-25T15:19:36Z",
   "publishers": [
     {
       "id": "sub2api",
@@ -168,31 +168,6 @@
           "host_compat": ">=0.1.304 <0.2.0",
           "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-gemini-v0.4.1",
           "source_digest": "sha256:633becb00ee6d162c7a6f9912badb449f00eb91c9fbc497d463b65b8f1c27634"
-        }
-      ]
-    },
-    {
-      "key": "guard",
-      "publisher": "sub2api",
-      "name": {
-        "en": "Guard",
-        "zh": "请求守卫"
-      },
-      "description": {
-        "en": "Blocks gateway requests whose prompt matches keyword or regex rules, counts traffic from usage events, and shows a dashboard.",
-        "zh": "按关键词或正则规则拦截网关请求，基于用量事件统计流量，并提供统计大盘。"
-      },
-      "repo": "touwaeriol/sup2api",
-      "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/guard",
-      "versions": [
-        {
-          "version": "0.3.1",
-          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-guard-v0.3.1/guard-0.3.1.s2plugin",
-          "sha256": "6db632ffecae2d1c86d2f0dc9f8d206567273fd855d542bd48ee7f5bfc994760",
-          "size": 15351010,
-          "host_compat": ">=0.1.304 <0.2.0",
-          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-guard-v0.3.1",
-          "source_digest": "sha256:ade3b4291671102fe8c2a117dfc11e646eb5beea4a4da0dc07ba99b2a60a0858"
         }
       ]
     },
