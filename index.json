@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-11-24T13:27:04Z",
+  "generated_at": "2026-11-25T11:51:52Z",
   "publishers": [
     {
       "id": "sub2api",
@@ -108,6 +108,15 @@
       "source": "https://github.com/touwaeriol/sup2api/tree/develop/next/plugins/codex",
       "builtin": true,
       "versions": [
+        {
+          "version": "0.2.3",
+          "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-codex-v0.2.3/codex-0.2.3.s2plugin",
+          "sha256": "3d7cb0e23a52aebb5c99300cbee5383e61e4125d7e88ec07391ef8fc0d209588",
+          "size": 15266425,
+          "host_compat": ">=0.1.304 <0.2.0",
+          "release_url": "https://github.com/touwaeriol/sup2api/releases/tag/plugin-codex-v0.2.3",
+          "source_digest": "sha256:a36a3b799551768f3ff752d354668eba0797fec4bcac286d9dc8e782485e7aeb"
+        },
         {
           "version": "0.2.2",
           "url": "https://github.com/touwaeriol/sup2api/releases/download/plugin-codex-v0.2.2/codex-0.2.2.s2plugin",
